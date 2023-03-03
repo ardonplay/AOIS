@@ -180,7 +180,6 @@ pub mod binary_operations {
         let mut end = second;
 
         end.replace_range(0..1, "0");
-        println!("{}", sign);
         loop {
             if iter != end {
                 output = binary_sum(output, first.clone());
