@@ -97,9 +97,9 @@ pub mod floating_operations {
 
         res.index = first.index;
         res.mantissa = binary_sum(first.mantissa, second.mantissa);
-        let rezulator: f32 = to_decimal(res.clone().mantissa, 23) as f32
+        let res_output: f32 = to_decimal(res.clone().mantissa, 23) as f32
             * f32::powf(10.0, (-to_decimal(res.clone().index, 8)) as f32);
-        println!("{}", rezulator);
+        println!("{}", res_output);
         print_float_bi_code(res);
     }
 }

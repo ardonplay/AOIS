@@ -98,6 +98,46 @@ pub mod binary_operations {
     }
 
 
+    fn perceptron(first: char, second: char, trans: bool, sum: &mut String) -> bool {
+        let mut trans = trans;
+        if first == '0' && second == '0' {
+            match trans {
+                true => {
+                    sum.push('1');
+                    trans = false;
+                }
+                false => {
+                    sum.push('0');
+                    trans = false;
+                }
+            }
+        } else if (first == '1' && second == '0') ||
+            (first == '0' && second == '1') {
+            match trans {
+                true => {
+                    sum.push('0');
+                    trans = true;
+                }
+                false => {
+                    sum.push('1');
+                    trans = false;
+                }
+            }
+        } else if first == '1' && second == '1' {
+            match trans {
+                true => {
+                    sum.push('1');
+                    trans = true;
+                }
+                false => {
+                    sum.push('0');
+                    trans = true;
+                }
+            }
+        }
+        trans
+    }
+
     pub fn summator(first: String, second: String) -> String {
         let mut sum = String::new();
 
@@ -114,36 +154,8 @@ pub mod binary_operations {
             }
             let first_binary_symbol = first.chars().nth(index - 1).unwrap();
             let second_binary_symbol = second.chars().nth(index - 1).unwrap();
+            trans = perceptron(first_binary_symbol, second_binary_symbol, trans, &mut sum);
 
-            if first_binary_symbol == '0' && second_binary_symbol == '0' {
-                if trans {
-                    sum.push('1');
-                    trans = false;
-                } else if !trans {
-                    sum.push('0');
-                    trans = false;
-                }
-            } else if (first_binary_symbol == '1' && second_binary_symbol == '0') ||
-                (first_binary_symbol == '0' && second_binary_symbol == '1') {
-                match trans {
-                    true => {
-                        sum.push('0');
-                        trans = true;
-                    }
-                    false => {
-                        sum.push('1');
-                        trans = false;
-                    }
-                }
-            } else if first_binary_symbol == '1' && second_binary_symbol == '1' {
-                if !trans {
-                    sum.push('0');
-                    trans = true;
-                } else if trans {
-                    sum.push('1');
-                    trans = true;
-                }
-            }
 
             index -= 1;
         }
