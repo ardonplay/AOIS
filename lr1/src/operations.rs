@@ -78,22 +78,14 @@ pub mod binary_operations {
 
 
     pub fn binary_sum(mut first: String, mut second: String) -> String {
-        let sign = get_sign(first.clone(), second.clone());
-        let mut rev_first = false;
-        let mut rev_second = false;
-
         let bin_size = first.chars().count();
         if first.starts_with('1') && second.starts_with('1') {
             first = to_ext_view(first, bin_size as i32);
             second = to_ext_view(second, bin_size as i32);
         } else if first.starts_with('1') {
             first = to_ext_view(first, bin_size as i32);
-            //second = to_ext_view(second);
-            rev_first = true;
         } else if second.starts_with('1') {
             second = to_ext_view(second, bin_size as i32);
-            //first = to_ext_view(first);
-            rev_second = true;
         }
         let mut sum = summator(first, second);
 
