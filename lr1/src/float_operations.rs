@@ -1,5 +1,6 @@
 pub mod floating_operations {
     use std::cmp::Ordering;
+    use crate::constants::{FLOAT_INDEX_SIZE, FLOAT_MANTISSA_SIZE};
 
     use crate::operations::binary_operations::{binary_sum, to_binary, to_decimal};
 
@@ -50,22 +51,22 @@ pub mod floating_operations {
         }
 
         let decimal_int = (decimal * f32::powf(10.0, ind as f32)) as i32;
-        output.index = to_binary(ind, 8);
-        output.mantissa = to_binary(decimal_int, 23);
+        output.index = to_binary(ind,FLOAT_INDEX_SIZE);
+        output.mantissa = to_binary(decimal_int, FLOAT_MANTISSA_SIZE);
 
         output
     }
 
     pub fn basing(mut first: Float, second: Float, first_index: i32) -> Float {
         while first.index.clone() != second.index.clone() {
-            first.index = binary_sum(first.index.clone(), to_binary(1, 8));
+            first.index = binary_sum(first.index.clone(), to_binary(1,FLOAT_INDEX_SIZE));
         }
-        let mut digit_mantissa = to_decimal(first.mantissa.clone(), 23);
+        let mut digit_mantissa = to_decimal(first.mantissa.clone(), FLOAT_MANTISSA_SIZE);
         digit_mantissa *= i32::pow(
             10,
-            (to_decimal(first.index.clone(), 8) - first_index) as u32,
+            (to_decimal(first.index.clone(),FLOAT_INDEX_SIZE) - first_index) as u32,
         );
-        first.mantissa = to_binary(digit_mantissa, 23);
+        first.mantissa = to_binary(digit_mantissa, FLOAT_MANTISSA_SIZE);
         first
     }
 
@@ -76,8 +77,8 @@ pub mod floating_operations {
             sign: 0,
         };
 
-        let second_index = to_decimal(second.index.clone(), 8);
-        let first_index = to_decimal(first.index.clone(), 8);
+        let second_index = to_decimal(second.index.clone(),FLOAT_INDEX_SIZE);
+        let first_index = to_decimal(first.index.clone(),FLOAT_INDEX_SIZE);
 
         match first_index.cmp(&second_index) {
             Ordering::Less => first = basing(first.clone(), second.clone(), first_index),
@@ -97,8 +98,8 @@ pub mod floating_operations {
 
         res.index = first.index;
         res.mantissa = binary_sum(first.mantissa, second.mantissa);
-        let res_output: f32 = to_decimal(res.clone().mantissa, 23) as f32
-            * f32::powf(10.0, (-to_decimal(res.clone().index, 8)) as f32);
+        let res_output: f32 = to_decimal(res.clone().mantissa, FLOAT_MANTISSA_SIZE) as f32
+            * f32::powf(10.0, (-to_decimal(res.clone().index,FLOAT_INDEX_SIZE)) as f32);
         println!("{}", res_output);
         print_float_bi_code(res);
     }

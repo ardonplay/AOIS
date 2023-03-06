@@ -1,4 +1,6 @@
 pub mod binary_operations {
+    use crate::constants::BINARY_SIZE;
+
     pub fn to_binary(mut input: i32, bin_size: i32) -> String {
         let mut output = String::new();
 
@@ -185,7 +187,7 @@ pub mod binary_operations {
     }
 
     pub fn multiplex(first: String, second: String) -> String {
-        let mut iter = to_binary(1, 32);
+        let mut iter = to_binary(1,BINARY_SIZE);
 
         let mut output = first.clone();
         let sign = get_sign(first.clone(), second.clone());
@@ -198,7 +200,7 @@ pub mod binary_operations {
             } else {
                 break;
             }
-            iter = summator(iter, to_binary(1, 32));
+            iter = summator(iter, to_binary(1,BINARY_SIZE));
         }
         if sign == '1' {
             output.replace_range(0..1, "1");
@@ -213,20 +215,20 @@ pub mod binary_operations {
         first.replace_range(0..1, "0");
 
 
-        if second == to_binary(0, 32) {
-            return to_binary(0, 32);
+        if second == to_binary(0,BINARY_SIZE) {
+            return to_binary(0,BINARY_SIZE);
         }
         second.replace_range(0..1, "1");
 
         let mut output = first.clone();
 
-        let mut iter = to_binary(0, 32);
+        let mut iter = to_binary(0,BINARY_SIZE);
         loop {
             output = binary_sum(output, second.clone());
             if !output.starts_with(first.chars().next().unwrap()) {
                 break;
             }
-            iter = binary_sum(iter, to_binary(1, 32));
+            iter = binary_sum(iter, to_binary(1,BINARY_SIZE));
         }
 
         if sign == '1' {
