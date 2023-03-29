@@ -1,12 +1,12 @@
-package org.ardonplay;
+package org.ardonplay.logic;
 
 import java.util.Objects;
 
 public class Symbol {
 
-  int value;
+  public int value;
 
-  String name;
+  public String name;
 
   {
     value = 0;

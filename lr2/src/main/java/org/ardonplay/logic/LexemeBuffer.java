@@ -1,4 +1,4 @@
-package org.ardonplay;
+package org.ardonplay.logic;
 
 import java.util.List;
 

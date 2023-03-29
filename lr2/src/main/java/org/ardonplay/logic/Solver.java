@@ -1,4 +1,4 @@
-package org.ardonplay;
+package org.ardonplay.logic;
 
 import java.util.ArrayList;
 
@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class Solver {
 
-  static Map<String, Symbol> symbols = new HashMap<>();
+  public static Map<String, Symbol> symbols = new HashMap<>();
 
 
   public static List<Lexeme> lexAnalyze(String expText) {

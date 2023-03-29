@@ -1,12 +1,13 @@
 package org.ardonplay;
 
 
-import static org.ardonplay.LogicalOperations.toDecimal;
-import static org.ardonplay.Solver.expr;
-import static org.ardonplay.Solver.lexAnalyze;
-import static org.ardonplay.Solver.symbols;
+import static org.ardonplay.logic.LogicalOperations.createPCNF;
+import static org.ardonplay.logic.LogicalOperations.createPDNF;
+import static org.ardonplay.logic.LogicalOperations.toDecimal;
+import static org.ardonplay.logic.Solver.expr;
+import static org.ardonplay.logic.Solver.lexAnalyze;
+import static org.ardonplay.logic.Solver.symbols;
 
-import com.sun.source.tree.TryTree;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,10 +15,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+import org.ardonplay.logic.Lexeme;
+import org.ardonplay.logic.LexemeBuffer;
 
 public class Main {
 
@@ -104,6 +106,8 @@ public class Main {
 
     System.out.format("Index: %s", toDecimal(TruthMap, expressionText));
 
+    createPCNF(TruthMap, expressionText);
+    createPDNF(TruthMap, expressionText);
   }
 
 }

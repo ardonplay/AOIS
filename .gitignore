@@ -1,1 +1,5 @@
-/target
+*target
+
+*.idea
+._*
+*.DS_Store

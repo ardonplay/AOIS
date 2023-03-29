@@ -1,12 +1,11 @@
-package org.ardonplay;
+package org.ardonplay.logic;
 
-import java.util.function.Supplier;
 
 public class Lexeme {
   LexemeType type;
   String value;
 
-  Symbol symbol;
+  public Symbol symbol;
 
   {
     symbol = null;

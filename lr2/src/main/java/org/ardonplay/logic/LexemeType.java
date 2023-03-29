@@ -1,4 +1,4 @@
-package org.ardonplay;
+package org.ardonplay.logic;
 
 public enum LexemeType {
   LEFT_BRACKET, RIGHT_BRACKET,
