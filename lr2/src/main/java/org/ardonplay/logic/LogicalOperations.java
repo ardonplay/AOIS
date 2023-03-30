@@ -2,6 +2,7 @@ package org.ardonplay.logic;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -51,6 +52,21 @@ public class LogicalOperations {
     }
     return output;
   }
+  public static int toDecimal(String string) {
+
+    ArrayList<Integer> answer = new ArrayList<>();
+    for (char str : string.toCharArray()) {
+      answer.add(Integer.parseInt(String.valueOf(str)));
+    }
+      int degree = answer.size() - 1;
+
+      int output = 0;
+      for (Integer index : answer) {
+        output += index * Math.pow(2, degree);
+        degree--;
+      }
+      return output;
+    }
 
   public static void createPCNF(Map<String, ArrayList<Integer>> map, String LexemeString) {
     ArrayList<Integer> answer = map.get(LexemeString);
@@ -64,6 +80,8 @@ public class LogicalOperations {
     }
     StringBuilder string = new StringBuilder();
 
+    StringBuilder integerString = new StringBuilder();
+
     string.append("PCNF: ");
     for (Integer integer : indexes) {
 
@@ -72,18 +90,44 @@ public class LogicalOperations {
         if (!Objects.equals(entry.getKey(), LexemeString)) {
           if (entry.getValue().get(integer) == 0) {
             string.append("!").append(entry.getKey());
+            integerString.append(not(entry.getValue().get(integer)));
           } else {
             string.append(entry.getKey());
+            integerString.append(not(entry.getValue().get(integer)));
           }
           string.append("\\/");
         }
       }
       string.replace(string.length() - 2, string.length(), "");
       string.append(") /\\ ");
+      integerString.append("*");
     }
     string.replace(string.length()-3, string.length(), "");
+    integerString.replace(integerString.length() -1, integerString.length(), "");
+
     System.out.println();
     System.out.println(string);
+    System.out.println(integerString);
+    stringToList(String.valueOf(integerString));
+  }
+
+  private static List<Integer> stringToList(String string){
+    List<Integer> list = new ArrayList<>();
+
+    StringBuilder temp = new StringBuilder();
+
+    for(char c: string.toCharArray()){
+      if(c != '*' && c != '+'){
+        temp.append(c);
+      }
+      else {
+        list.add(toDecimal(String.valueOf(temp)));
+        temp.replace(0, temp.length(), "");
+      }
+    }
+    list.add(toDecimal(String.valueOf(temp)));
+    System.out.println(list);
+    return list;
   }
 
   public static void createPDNF(Map<String, ArrayList<Integer>> map, String LexemeString) {
@@ -98,7 +142,9 @@ public class LogicalOperations {
     }
     StringBuilder string = new StringBuilder();
 
-    string.append("PCNF: ");
+    StringBuilder integerString = new StringBuilder();
+
+    string.append("PDNF: ");
     for (Integer integer : indexes) {
 
       string.append("(");
@@ -106,17 +152,23 @@ public class LogicalOperations {
         if (!Objects.equals(entry.getKey(), LexemeString)) {
           if (entry.getValue().get(integer) == 0) {
             string.append("!").append(entry.getKey());
+            integerString.append(entry.getValue().get(integer));
           } else {
             string.append(entry.getKey());
+            integerString.append(entry.getValue().get(integer));
           }
           string.append("/\\");
         }
       }
       string.replace(string.length() - 2, string.length(), "");
       string.append(") \\/ ");
+      integerString.append("+");
     }
     string.replace(string.length()-3, string.length(), "");
+    integerString.replace(integerString.length() -1, integerString.length(), "");
     System.out.println();
     System.out.println(string);
+    System.out.println(integerString);
+    stringToList(String.valueOf(integerString));
   }
 }
