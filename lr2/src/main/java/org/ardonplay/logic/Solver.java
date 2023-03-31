@@ -88,7 +88,7 @@ public class Solver {
       Lexeme lexeme = lexemes.next();
       switch (lexeme.type) {
         case OP_DIS -> value = LogicalOperations.disjunction(value, factor(lexemes));
-        case OP_CON -> value = LogicalOperations.conjuction(value, factor(lexemes));
+        case OP_CON -> value = LogicalOperations.conjunction(value, factor(lexemes));
         case OP_EQ -> value = LogicalOperations.equivalence(value, factor(lexemes));
         case OP_IMPL -> value = LogicalOperations.implication(value, factor(lexemes));
         case EOF, RIGHT_BRACKET -> {

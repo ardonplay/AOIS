@@ -1,6 +1,5 @@
 package org.ardonplay.logic;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,12 +23,12 @@ public class LogicalOperations {
     return disjunction(not(A), B);
   }
 
-  public static int conjuction(int A, int B) {
+  public static int conjunction(int A, int B) {
     return A * B;
   }
 
   public static int equivalence(int A, int B) {
-    return conjuction(implication(A, B), implication(B, A));
+    return conjunction(implication(A, B), implication(B, A));
   }
 
   public static int not(int A) {
@@ -102,13 +101,7 @@ public class LogicalOperations {
       string.append(") /\\ ");
       integerString.append("*");
     }
-    string.replace(string.length()-3, string.length(), "");
-    integerString.replace(integerString.length() -1, integerString.length(), "");
-
-    System.out.println();
-    System.out.println(string);
-    System.out.println(integerString);
-    stringToList(String.valueOf(integerString));
+    printLogicalFunction(string, integerString);
   }
 
   private static List<Integer> stringToList(String string){
@@ -126,7 +119,6 @@ public class LogicalOperations {
       }
     }
     list.add(toDecimal(String.valueOf(temp)));
-    System.out.println(list);
     return list;
   }
 
@@ -164,11 +156,23 @@ public class LogicalOperations {
       string.append(") \\/ ");
       integerString.append("+");
     }
+    printLogicalFunction(string, integerString);
+  }
+
+  private static void printLogicalFunction(StringBuilder string, StringBuilder integerString) {
     string.replace(string.length()-3, string.length(), "");
     integerString.replace(integerString.length() -1, integerString.length(), "");
     System.out.println();
     System.out.println(string);
     System.out.println(integerString);
-    stringToList(String.valueOf(integerString));
+    System.out.println(stringToList(String.valueOf(integerString)));
+  }
+
+  public static void changeValueOfSymbol(LexemeBuffer lexemeBuffer, String symbol, int value) {
+    lexemeBuffer.lexemes.stream()
+            .filter(lexeme -> lexeme.symbol != null)
+            .filter(lexeme -> Objects.equals(
+                    lexeme.symbol.name, symbol))
+            .forEach(lexeme -> lexeme.symbol.value = value);
   }
 }
