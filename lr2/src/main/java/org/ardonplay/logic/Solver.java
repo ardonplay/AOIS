@@ -9,6 +9,10 @@ import java.util.Map;
 
 public class Solver {
 
+  public static List<String> getAllSymbols(LexemeBuffer lexemeBuffer) {
+    return lexemeBuffer.lexemes.stream().filter(lexeme -> lexeme.symbol != null)
+        .map(lexeme -> lexeme.symbol.name).toList();
+  }
   public static Map<String, Symbol> symbols = new HashMap<>();
 
 

@@ -1,9 +1,13 @@
 package org.ardonplay.logic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class LogicalOperations {
 
@@ -35,9 +39,7 @@ public class LogicalOperations {
     return A == 0 ? 1 : 0;
   }
 
-  public static int toDecimal(Map<String, ArrayList<Integer>> map, String LexemeString) {
-    ArrayList<Integer> answer = map.get(LexemeString);
-
+  private static int toDecimal(List<Integer> answer){
     int degree = answer.size() - 1;
 
     int output = 0;
@@ -46,28 +48,21 @@ public class LogicalOperations {
       degree--;
     }
     return output;
+  }
+  public static int toDecimal(Map<String, List<Integer>> map, String LexemeString) {
+   return toDecimal(map.get(LexemeString));
   }
 
   public static int toDecimal(String string) {
-
-    ArrayList<Integer> answer = new ArrayList<>();
-    for (char str : string.toCharArray()) {
-      answer.add(Integer.parseInt(String.valueOf(str)));
-    }
-    int degree = answer.size() - 1;
-
-    int output = 0;
-    for (Integer index : answer) {
-      output += index * Math.pow(2, degree);
-      degree--;
-    }
-    return output;
+    return toDecimal(Stream.of(string)
+        .map(Integer::parseInt)
+        .collect(Collectors.toList()));
   }
 
-  public static void createPCNF(Map<String, ArrayList<Integer>> map, String LexemeString) {
-    ArrayList<Integer> answer = map.get(LexemeString);
+  public static String createPCNF(Map<String, List<Integer>> map, String LexemeString) {
+    List<Integer> answer = map.get(LexemeString);
 
-    ArrayList<Integer> indexes = new ArrayList<>();
+    List<Integer> indexes = new ArrayList<>();
 
     for (int i = 0; i < answer.size(); i++) {
       if (answer.get(i) == 0) {
@@ -83,7 +78,7 @@ public class LogicalOperations {
     for (Integer integer : indexes) {
       StringBuilder number = new StringBuilder();
       string.append("(");
-      for (Map.Entry<String, ArrayList<Integer>> entry : map.entrySet()) {
+      for (Map.Entry<String, List<Integer>> entry : map.entrySet()) {
         if (!Objects.equals(entry.getKey(), LexemeString)) {
           number.append(entry.getValue().get(integer));
           if (entry.getValue().get(integer) == 0) {
@@ -100,7 +95,7 @@ public class LogicalOperations {
       integerString.append(number);
       integerString.append("*");
     }
-    printLogicalFunction(string, integerString);
+    return printLogicalFunction(string, integerString);
   }
 
   private static List<Integer> stringToList(String string) {
@@ -121,7 +116,7 @@ public class LogicalOperations {
     return list;
   }
 
-  public static void createPDNF(Map<String, ArrayList<Integer>> map, String LexemeString) {
+  public static String createPDNF(Map<String, List<Integer>> map, String LexemeString) {
     List<Integer> answer = map.get(LexemeString);
 
     List<Integer> indexes = new ArrayList<>();
@@ -140,7 +135,7 @@ public class LogicalOperations {
 
       string.append("(");
       StringBuilder number = new StringBuilder();
-      for (Map.Entry<String, ArrayList<Integer>> entry : map.entrySet()) {
+      for (Map.Entry<String, List<Integer>> entry : map.entrySet()) {
         if (!Objects.equals(entry.getKey(), LexemeString)) {
           number.append(entry.getValue().get(integer));
           if (entry.getValue().get(integer) == 0) {
@@ -157,16 +152,13 @@ public class LogicalOperations {
       integerString.append(number);
       integerString.append("+");
     }
-    printLogicalFunction(string, integerString);
+    return printLogicalFunction(string, integerString);
   }
 
-  private static void printLogicalFunction(StringBuilder string, StringBuilder integerString) {
+  private static String printLogicalFunction(StringBuilder string, StringBuilder integerString) {
     string.replace(string.length() - 3, string.length(), "");
     integerString.replace(integerString.length() - 1, integerString.length(), "");
-    System.out.println();
-    System.out.println(string);
-    System.out.println(integerString);
-    System.out.println(stringToList(String.valueOf(integerString)));
+    return string + "\n" + integerString + "\n" + stringToList(String.valueOf(integerString));
   }
 
   public static void changeValueOfSymbol(LexemeBuffer lexemeBuffer, String symbol, int value) {

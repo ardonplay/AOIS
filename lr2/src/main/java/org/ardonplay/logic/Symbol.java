@@ -12,18 +12,8 @@ public class Symbol {
     value = 0;
   }
 
-  public Symbol(String name, int value) {
-    this.name = name;
-    this.value = value;
-  }
-
   public Symbol(String name) {
     this.name = name;
-  }
-
-
-  public Symbol(char name) {
-    this.name = String.valueOf(name);
   }
 
   @Override
