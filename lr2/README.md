@@ -12,6 +12,8 @@ Run app via:
 Examples of expressions:
 
     !((A*B)+((C@D)~E))
+
+    !((A*B)+((C@A)~B))
     
     (A*B)
 

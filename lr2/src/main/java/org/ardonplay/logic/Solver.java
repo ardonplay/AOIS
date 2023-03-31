@@ -13,7 +13,7 @@ public class Solver {
 
 
   public static List<Lexeme> lexAnalyze(String expText) {
-    ArrayList<Lexeme> lexemes = new ArrayList<>();
+    List<Lexeme> lexemes = new ArrayList<>();
     int pos = 0;
     while (pos < expText.length()) {
       char c = expText.charAt(pos);

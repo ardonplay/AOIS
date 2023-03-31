@@ -32,11 +32,7 @@ public class LogicalOperations {
   }
 
   public static int not(int A) {
-    if (A == 0) {
-      return 1;
-    } else {
-      return 0;
-    }
+    return A == 0 ? 1 : 0;
   }
 
   public static int toDecimal(Map<String, ArrayList<Integer>> map, String LexemeString) {
@@ -51,21 +47,22 @@ public class LogicalOperations {
     }
     return output;
   }
+
   public static int toDecimal(String string) {
 
     ArrayList<Integer> answer = new ArrayList<>();
     for (char str : string.toCharArray()) {
       answer.add(Integer.parseInt(String.valueOf(str)));
     }
-      int degree = answer.size() - 1;
+    int degree = answer.size() - 1;
 
-      int output = 0;
-      for (Integer index : answer) {
-        output += index * Math.pow(2, degree);
-        degree--;
-      }
-      return output;
+    int output = 0;
+    for (Integer index : answer) {
+      output += index * Math.pow(2, degree);
+      degree--;
     }
+    return output;
+  }
 
   public static void createPCNF(Map<String, ArrayList<Integer>> map, String LexemeString) {
     ArrayList<Integer> answer = map.get(LexemeString);
@@ -81,39 +78,41 @@ public class LogicalOperations {
 
     StringBuilder integerString = new StringBuilder();
 
+
     string.append("PCNF: ");
     for (Integer integer : indexes) {
-
+      StringBuilder number = new StringBuilder();
       string.append("(");
       for (Map.Entry<String, ArrayList<Integer>> entry : map.entrySet()) {
         if (!Objects.equals(entry.getKey(), LexemeString)) {
+          number.append(entry.getValue().get(integer));
           if (entry.getValue().get(integer) == 0) {
             string.append("!").append(entry.getKey());
-            integerString.append(not(entry.getValue().get(integer)));
           } else {
             string.append(entry.getKey());
-            integerString.append(not(entry.getValue().get(integer)));
           }
           string.append("\\/");
         }
       }
       string.replace(string.length() - 2, string.length(), "");
       string.append(") /\\ ");
+      number.reverse();
+      integerString.append(number);
       integerString.append("*");
     }
     printLogicalFunction(string, integerString);
   }
 
-  private static List<Integer> stringToList(String string){
+  private static List<Integer> stringToList(String string) {
+
     List<Integer> list = new ArrayList<>();
 
     StringBuilder temp = new StringBuilder();
 
-    for(char c: string.toCharArray()){
-      if(c != '*' && c != '+'){
+    for (char c : string.toCharArray()) {
+      if (c != '*' && c != '+') {
         temp.append(c);
-      }
-      else {
+      } else {
         list.add(toDecimal(String.valueOf(temp)));
         temp.replace(0, temp.length(), "");
       }
@@ -123,9 +122,9 @@ public class LogicalOperations {
   }
 
   public static void createPDNF(Map<String, ArrayList<Integer>> map, String LexemeString) {
-    ArrayList<Integer> answer = map.get(LexemeString);
+    List<Integer> answer = map.get(LexemeString);
 
-    ArrayList<Integer> indexes = new ArrayList<>();
+    List<Integer> indexes = new ArrayList<>();
 
     for (int i = 0; i < answer.size(); i++) {
       if (answer.get(i) == 1) {
@@ -140,28 +139,30 @@ public class LogicalOperations {
     for (Integer integer : indexes) {
 
       string.append("(");
+      StringBuilder number = new StringBuilder();
       for (Map.Entry<String, ArrayList<Integer>> entry : map.entrySet()) {
         if (!Objects.equals(entry.getKey(), LexemeString)) {
+          number.append(entry.getValue().get(integer));
           if (entry.getValue().get(integer) == 0) {
             string.append("!").append(entry.getKey());
-            integerString.append(entry.getValue().get(integer));
           } else {
             string.append(entry.getKey());
-            integerString.append(entry.getValue().get(integer));
           }
           string.append("/\\");
         }
       }
       string.replace(string.length() - 2, string.length(), "");
       string.append(") \\/ ");
+      number.reverse();
+      integerString.append(number);
       integerString.append("+");
     }
     printLogicalFunction(string, integerString);
   }
 
   private static void printLogicalFunction(StringBuilder string, StringBuilder integerString) {
-    string.replace(string.length()-3, string.length(), "");
-    integerString.replace(integerString.length() -1, integerString.length(), "");
+    string.replace(string.length() - 3, string.length(), "");
+    integerString.replace(integerString.length() - 1, integerString.length(), "");
     System.out.println();
     System.out.println(string);
     System.out.println(integerString);
@@ -170,9 +171,9 @@ public class LogicalOperations {
 
   public static void changeValueOfSymbol(LexemeBuffer lexemeBuffer, String symbol, int value) {
     lexemeBuffer.lexemes.stream()
-            .filter(lexeme -> lexeme.symbol != null)
-            .filter(lexeme -> Objects.equals(
-                    lexeme.symbol.name, symbol))
-            .forEach(lexeme -> lexeme.symbol.value = value);
+        .filter(lexeme -> lexeme.symbol != null)
+        .filter(lexeme -> Objects.equals(
+            lexeme.symbol.name, symbol))
+        .forEach(lexeme -> lexeme.symbol.value = value);
   }
 }
