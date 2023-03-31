@@ -19,6 +19,7 @@ import org.ardonplay.logic.TruthMap;
 public class Main {
     public static void main(String[] args) {
         Scanner stringScanner = new Scanner(System.in);
+        System.out.print("Type an expression:");
         String expressionText = stringScanner.nextLine();
 
         List<Lexeme> lexemes = lexAnalyze(expressionText);
