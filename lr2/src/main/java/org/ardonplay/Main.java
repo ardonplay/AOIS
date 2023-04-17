@@ -43,6 +43,7 @@ public class Main {
 
         System.out.println(createPCNF(map.getTruthMap(), expressionText));
         System.out.println(createPDNF(map.getTruthMap(), expressionText));
+
     }
 
 

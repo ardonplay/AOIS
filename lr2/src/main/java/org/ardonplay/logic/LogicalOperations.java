@@ -1,13 +1,9 @@
 package org.ardonplay.logic;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class LogicalOperations {
 
@@ -41,7 +37,6 @@ public class LogicalOperations {
 
   private static int toDecimal(List<Integer> answer){
     int degree = answer.size() - 1;
-
     int output = 0;
     for (Integer index : answer) {
       output += index * Math.pow(2, degree);
@@ -54,9 +49,11 @@ public class LogicalOperations {
   }
 
   public static int toDecimal(String string) {
-    return toDecimal(Stream.of(string)
-        .map(Integer::parseInt)
-        .collect(Collectors.toList()));
+    List<Integer> stringToInteger = new ArrayList<>();
+    for(char c: string.toCharArray()){
+      stringToInteger.add(Integer.valueOf(String.valueOf(c)));
+    }
+    return toDecimal(stringToInteger);
   }
 
   public static String createPCNF(Map<String, List<Integer>> map, String LexemeString) {
@@ -95,10 +92,12 @@ public class LogicalOperations {
       integerString.append(number);
       integerString.append("*");
     }
+    string.replace(string.length() - 3, string.length(), "");
+    integerString.replace(integerString.length() - 1, integerString.length(), "");
     return printLogicalFunction(string, integerString);
   }
 
-  private static List<Integer> stringToList(String string) {
+  private static List<Integer> getFunctionIndexes(String string) {
 
     List<Integer> list = new ArrayList<>();
 
@@ -152,13 +151,14 @@ public class LogicalOperations {
       integerString.append(number);
       integerString.append("+");
     }
+    string.replace(string.length() - 3, string.length(), "");
+    integerString.replace(integerString.length() - 1, integerString.length(), "");
+
     return printLogicalFunction(string, integerString);
   }
 
   private static String printLogicalFunction(StringBuilder string, StringBuilder integerString) {
-    string.replace(string.length() - 3, string.length(), "");
-    integerString.replace(integerString.length() - 1, integerString.length(), "");
-    return string + "\n" + integerString + "\n" + stringToList(String.valueOf(integerString));
+    return string + "\n" + integerString + "\n" + getFunctionIndexes(String.valueOf(integerString));
   }
 
   public static void changeValueOfSymbol(LexemeBuffer lexemeBuffer, String symbol, int value) {
