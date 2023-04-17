@@ -56,48 +56,7 @@ public class LogicalOperations {
     return toDecimal(stringToInteger);
   }
 
-  public static String createPCNF(Map<String, List<Integer>> map, String LexemeString) {
-    List<Integer> answer = map.get(LexemeString);
-
-    List<Integer> indexes = new ArrayList<>();
-
-    for (int i = 0; i < answer.size(); i++) {
-      if (answer.get(i) == 0) {
-        indexes.add(i);
-      }
-    }
-    StringBuilder string = new StringBuilder();
-
-    StringBuilder integerString = new StringBuilder();
-
-
-    string.append("PCNF: ");
-    for (Integer integer : indexes) {
-      StringBuilder number = new StringBuilder();
-      string.append("(");
-      for (Map.Entry<String, List<Integer>> entry : map.entrySet()) {
-        if (!Objects.equals(entry.getKey(), LexemeString)) {
-          number.append(entry.getValue().get(integer));
-          if (entry.getValue().get(integer) == 0) {
-            string.append("!").append(entry.getKey());
-          } else {
-            string.append(entry.getKey());
-          }
-          string.append("\\/");
-        }
-      }
-      string.replace(string.length() - 2, string.length(), "");
-      string.append(") /\\ ");
-      number.reverse();
-      integerString.append(number);
-      integerString.append("*");
-    }
-    string.replace(string.length() - 3, string.length(), "");
-    integerString.replace(integerString.length() - 1, integerString.length(), "");
-    return printLogicalFunction(string, integerString);
-  }
-
-  private static List<Integer> getFunctionIndexes(String string) {
+  public static List<Integer> getFunctionIndexes(String string) {
 
     List<Integer> list = new ArrayList<>();
 
@@ -115,51 +74,6 @@ public class LogicalOperations {
     return list;
   }
 
-  public static String createPDNF(Map<String, List<Integer>> map, String LexemeString) {
-    List<Integer> answer = map.get(LexemeString);
-
-    List<Integer> indexes = new ArrayList<>();
-
-    for (int i = 0; i < answer.size(); i++) {
-      if (answer.get(i) == 1) {
-        indexes.add(i);
-      }
-    }
-    StringBuilder string = new StringBuilder();
-
-    StringBuilder integerString = new StringBuilder();
-
-    string.append("PDNF: ");
-    for (Integer integer : indexes) {
-
-      string.append("(");
-      StringBuilder number = new StringBuilder();
-      for (Map.Entry<String, List<Integer>> entry : map.entrySet()) {
-        if (!Objects.equals(entry.getKey(), LexemeString)) {
-          number.append(entry.getValue().get(integer));
-          if (entry.getValue().get(integer) == 0) {
-            string.append("!").append(entry.getKey());
-          } else {
-            string.append(entry.getKey());
-          }
-          string.append("/\\");
-        }
-      }
-      string.replace(string.length() - 2, string.length(), "");
-      string.append(") \\/ ");
-      number.reverse();
-      integerString.append(number);
-      integerString.append("+");
-    }
-    string.replace(string.length() - 3, string.length(), "");
-    integerString.replace(integerString.length() - 1, integerString.length(), "");
-
-    return printLogicalFunction(string, integerString);
-  }
-
-  private static String printLogicalFunction(StringBuilder string, StringBuilder integerString) {
-    return string + "\n" + integerString + "\n" + getFunctionIndexes(String.valueOf(integerString));
-  }
 
   public static void changeValueOfSymbol(LexemeBuffer lexemeBuffer, String symbol, int value) {
     lexemeBuffer.lexemes.stream()
