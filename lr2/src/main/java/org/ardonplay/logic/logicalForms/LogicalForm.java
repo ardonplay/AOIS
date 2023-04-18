@@ -22,15 +22,13 @@ public abstract class LogicalForm {
 
     protected List<List<String>> normalForm = new ArrayList<>() {
         @Override
-        public String toString(){
+        public String toString() {
             StringBuilder output = new StringBuilder();
-            for(List<String> i: normalForm){
+            for (List<String> i : normalForm) {
                 output.append("(");
-                for(String j: i){
+                for (String j : i) {
                     output.append(j);
-                    if(!Objects.equals(j, "!")) {
-                        output.append(internalConnection);
-                    }
+                    output.append(internalConnection);
                 }
                 output.replace(output.length() - 1, output.length(), "");
                 output.append(")");
@@ -43,11 +41,11 @@ public abstract class LogicalForm {
 
     protected List<List<String>> binaryForm = new ArrayList<>() {
         @Override
-        public String toString(){
+        public String toString() {
             StringBuilder output = new StringBuilder();
 
-            for(List<String> index: binaryForm){
-                for(String i: index){
+            for (List<String> index : binaryForm) {
+                for (String i : index) {
                     output.append(i);
                 }
                 output.append(externalConnection);
@@ -79,8 +77,7 @@ public abstract class LogicalForm {
                 if (!Objects.equals(entry.getKey(), LexemeString)) {
                     number.append(entry.getValue().get(integer));
                     if (entry.getValue().get(integer) == 0) {
-                        constiteunta.add("!");
-                        constiteunta.add(entry.getKey());
+                        constiteunta.add("!" + entry.getKey());
                     } else {
                         constiteunta.add(entry.getKey());
                     }

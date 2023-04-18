@@ -27,12 +27,14 @@ public class LogicalExpressionSolver {
 
     final String expressionText;
 
+    private static List<String> allSymbols;
+
     public LogicalExpressionSolver(String expressionText){
         this.expressionText = expressionText;
         List<Lexeme> lexemes = lexAnalyze(expressionText);
         LexemeBuffer lexemeBuffer = new LexemeBuffer(lexemes);
 
-        List<String> allSymbols = getAllSymbols(lexemeBuffer);
+        allSymbols = getAllSymbols(lexemeBuffer);
 
         allSymbols = allSymbols.stream().distinct().collect(Collectors.toList());
 
