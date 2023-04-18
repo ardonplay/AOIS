@@ -14,15 +14,48 @@ import static org.ardonplay.logic.LogicalOperations.getFunctionIndexes;
 @Setter
 public abstract class LogicalForm {
 
-    protected StringBuilder binaryForm = new StringBuilder();
-
-    protected StringBuilder normalForm = new StringBuilder();
-
     protected List<Integer> indexes = new ArrayList<>();
 
     protected char internalConnection;
 
     protected char externalConnection;
+
+    protected List<List<String>> normalForm = new ArrayList<>() {
+        @Override
+        public String toString(){
+            StringBuilder output = new StringBuilder();
+            for(List<String> i: normalForm){
+                output.append("(");
+                for(String j: i){
+                    output.append(j);
+                    if(!Objects.equals(j, "!")) {
+                        output.append(internalConnection);
+                    }
+                }
+                output.replace(output.length() - 1, output.length(), "");
+                output.append(")");
+                output.append(externalConnection);
+            }
+            output.replace(output.length() - 1, output.length(), "");
+            return String.valueOf(output);
+        }
+    };
+
+    protected List<List<String>> binaryForm = new ArrayList<>() {
+        @Override
+        public String toString(){
+            StringBuilder output = new StringBuilder();
+
+            for(List<String> index: binaryForm){
+                for(String i: index){
+                    output.append(i);
+                }
+                output.append(externalConnection);
+            }
+            output.replace(output.length() - 1, output.length(), "");
+            return String.valueOf(output);
+        }
+    };
 
     protected int index;
 
@@ -40,26 +73,24 @@ public abstract class LogicalForm {
 
         for (Integer integer : indexes) {
             StringBuilder number = new StringBuilder();
-            normalForm.append("(");
+            List<String> constiteunta = new ArrayList<>();
+            List<String> binaryConstiteunta = new ArrayList<>();
             for (Map.Entry<String, List<Integer>> entry : map.entrySet()) {
                 if (!Objects.equals(entry.getKey(), LexemeString)) {
                     number.append(entry.getValue().get(integer));
                     if (entry.getValue().get(integer) == 0) {
-                        normalForm.append("!").append(entry.getKey());
+                        constiteunta.add("!");
+                        constiteunta.add(entry.getKey());
                     } else {
-                        normalForm.append(entry.getKey());
+                        constiteunta.add(entry.getKey());
                     }
-                    normalForm.append(internalConnection);
                 }
             }
-            normalForm.replace(normalForm.length() - 1, normalForm.length(), "");
-            normalForm.append(") ").append(externalConnection).append(" ");
+            normalForm.add(constiteunta);
             number.reverse();
-            binaryForm.append(number);
-            binaryForm.append(externalConnection);
+            binaryConstiteunta.add(String.valueOf(number));
+            binaryForm.add(binaryConstiteunta);
         }
-        normalForm.replace(normalForm.length() - 3, normalForm.length(), "");
-        binaryForm.replace(binaryForm.length() - 1, binaryForm.length(), "");
     }
 
     @Override
