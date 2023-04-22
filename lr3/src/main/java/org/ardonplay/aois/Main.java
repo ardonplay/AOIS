@@ -18,16 +18,16 @@ public class Main {
         System.out.println(minimization);
         System.out.println(minimize.minimiseSecond(minimization, true));
 
-        minimization = minimize.minimise(solver.getPcnf().getNormalForm());
-        System.out.println();
-        System.out.println(minimization);
-        System.out.println(minimize.minimiseSecond(minimization, false));
+        //minimization = minimize.minimise(solver.getPcnf().getNormalForm());
+        //System.out.println();
+        //System.out.println(minimization);
+        //System.out.println(minimize.minimiseSecond(minimization, false));
 
-        System.out.println("\n\n\n\n\n\n");
+        //System.out.println("\n\n\n\n\n\n");
 
-        TableMinimize tableMinimize = new TableMinimize();
+        //TableMinimize tableMinimize = new TableMinimize();
 
-        tableMinimize.tableMinimize(solver.getPcnf().getNormalForm());
+        //tableMinimize.tableMinimize(solver.getPcnf().getNormalForm());
 
     }
 }

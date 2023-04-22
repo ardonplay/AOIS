@@ -47,7 +47,7 @@ public class AnalyticalMinimize {
                     if((int) obj2 == 0){
                         indexes.set(index, obj2);
                         indexes.remove(obj1);
-                    } else if ((int) obj1 == 1) {
+                    } else if ((int) obj2 == 1) {
                         indexes.remove(obj2);
                         indexes.set(index, obj1);
                     }
@@ -113,42 +113,51 @@ public class AnalyticalMinimize {
     }
 
 
-    public void checker(List<List<String>> output, int i, int j){
-        for (int k = 0; k < output.get(i).size(); k++) {
-                if (Objects.equals(output.get(i).get(k), "!" + output.get(j).get(k)) ||
-                        Objects.equals("!" + output.get(i).get(k), output.get(j).get(k))) {
-                    output.get(j).remove(k);
-                    output.remove(i);
-                    break;
-                }
-        }
-    }
-
     public List<List<String>> minimise(List<List<String>> constituents) {
-        List<List<String>> output = new ArrayList<>(constituents);
+        List<List<String>> output = new ArrayList<>();
 
-        if (output.size() == 1) {
+        if (constituents.size() == 1) {
             return output;
         }
-        output.sort((list1, list2) -> {
-            int totalLength1 = 0;
-            for (String s : list1) {
-                totalLength1 += s.length();
-            }
-            int totalLength2 = 0;
-            for (String s : list2) {
-                totalLength2 += s.length();
-            }
-            return Integer.compare(totalLength2, totalLength1);
-        });
+//        constituents.sort((list1, list2) -> {
+//            int totalLength1 = 0;
+//            for (String s : list1) {
+//                totalLength1 += s.length();
+//            }
+//            int totalLength2 = 0;
+//            for (String s : list2) {
+//                totalLength2 += s.length();
+//            }
+//            return Integer.compare(totalLength2, totalLength1);
+//        });
 
-        for (int i = 0; i < output.size(); i++) {
-            for (int j = 0; j < output.size(); j++) {
-                if (output.get(i).size() == output.get(j).size()) {
-                    checker(output, i, j);
+        for (int i = 0; i < constituents.size(); i++) {
+            for (int j = i+1; j < constituents.size(); j++) {
+                List<String> variable1 = constituents.get(i);
+                List<String> variable2 = constituents.get(j);
+                int count = 0;
+                int index = 0;
+                boolean finded = false;
+                for (int k = 0; k < variable1.size(); k++) {
+                    if (Objects.equals(variable1.get(k), "!" + variable2.get(k)) ||
+                            Objects.equals("!" + variable1.get(k), variable2.get(k))) {
+                        count++;
+                    }
+                    if(count == 1 && !finded){
+                        index = k;
+                        finded = true;
+                    }
+                }
+                if(count == 1){
+                    System.out.println(index);
+                    List<String> tempList = new ArrayList<>(constituents.get(j));
+                    tempList.remove(index);
+                    output.add(tempList);
                 }
             }
         }
+
+
         return output;
     }
 }
