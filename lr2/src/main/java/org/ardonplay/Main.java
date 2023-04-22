@@ -12,6 +12,8 @@ public class Main {
 
         System.out.println(solver);
 
+        solver.getPdnf().getNormalForm().forEach(System.out::println);
+
     }
 
 
