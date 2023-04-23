@@ -13,49 +13,14 @@ public class AnalyticalMinimize {
     public void addSymbols(List<String> expression){
         for (String variable : expression) {
             if (variable.contains("!")) {
-                symbols.put(variable, 0);
-                symbols.put(variable.substring(1), 1);
+                symbols.put(variable, 1);
+                symbols.put(variable.substring(1), 0);
             } else {
                 symbols.put(variable, 1);
                 symbols.put("!" +variable, 0);
             }
         }
     }
-
-    public void indexesCheck(List<Object> indexes, boolean sdnf){
-        for (int index = 0; index < indexes.size() - 1; index++) {
-            Object obj1 = indexes.get(index);
-            Object obj2 = indexes.get(index+1);
-            if (obj1 instanceof Integer && obj2 instanceof Integer) {
-                if(!sdnf)
-                    indexes.set(index, disjunction((int) obj1, (int) obj2));
-                else
-                    indexes.set(index, conjunction((int) obj1, (int) obj2));
-                indexes.remove(obj2);
-            }
-            else if(obj1 instanceof Integer && obj2 instanceof String){
-                    if((int) obj1 == 0){
-                        indexes.set(index, 0);
-                        indexes.remove(obj2);
-                    } else if ((int) obj1 == 1) {
-                       indexes.remove(obj2);
-                        indexes.set(index, obj2);
-                   }
-
-            } else if (obj1 instanceof String && obj2 instanceof Integer) {
-
-                    if((int) obj2 == 0){
-                        indexes.set(index, obj2);
-                        indexes.remove(obj1);
-                    } else if ((int) obj2 == 1) {
-                        indexes.remove(obj2);
-                        indexes.set(index, obj1);
-                    }
-
-            }
-        }
-    }
-
     public void solve(List<String> strings, List<Object> indexes, boolean sdnf){
         List<Integer> tempList = new ArrayList<>();
 
@@ -87,6 +52,7 @@ public class AnalyticalMinimize {
                 }
             }
         }
+
     }
 
     public List<List<String>> minimiseSecond(List<List<String>> constituents, boolean sdnf) {
@@ -94,6 +60,7 @@ public class AnalyticalMinimize {
 
         for (int i = 0; i < output.size(); i++) {
             addSymbols(output.get(i));
+
             List<Object> indexes = new ArrayList<>();
 
             for (List<String> strings : output) {
@@ -101,12 +68,11 @@ public class AnalyticalMinimize {
                     solve(strings, indexes, sdnf);
                 }
             }
+            System.out.println(symbols);
+            System.out.println(indexes);
 
-            indexesCheck(indexes, sdnf);
 
-            if(indexes.size() != 0 && indexes.get(0) instanceof Integer){
-                output.remove(i);
-            }
+
             symbols.clear();
         }
         return output;
@@ -149,7 +115,6 @@ public class AnalyticalMinimize {
                     }
                 }
                 if(count == 1){
-                    System.out.println(index);
                     List<String> tempList = new ArrayList<>(constituents.get(j));
                     tempList.remove(index);
                     output.add(tempList);
