@@ -98,6 +98,10 @@ public class AnalyticalMinimize {
     public List<List<String>> minimiseSecond(List<List<String>> constituents, boolean sdnf) {
         List<List<String>> output = new ArrayList<>();
 
+        if(constituents.size() == 1){
+            return constituents;
+        }
+
         for (int i = 0; i < constituents.size(); i++) {
             addSymbols(constituents.get(i));
 
@@ -123,7 +127,7 @@ public class AnalyticalMinimize {
         List<List<String>> output = new ArrayList<>();
 
         if (constituents.size() == 1) {
-            return output;
+            return constituents;
         }
 //        constituents.sort((list1, list2) -> {
 //            int totalLength1 = 0;

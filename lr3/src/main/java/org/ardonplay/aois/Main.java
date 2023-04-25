@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        LogicalExpressionSolver solver = new LogicalExpressionSolver("(A*B)+C");
+        LogicalExpressionSolver solver = new LogicalExpressionSolver("(A*B)*C");
 
 
         System.out.println(solver);
@@ -18,16 +18,18 @@ public class Main {
         System.out.println(minimization);
         System.out.println(minimize.minimiseSecond(minimization, true));
 
-        //minimization = minimize.minimise(solver.getPcnf().getNormalForm());
-        //System.out.println();
-        //System.out.println(minimization);
-        //System.out.println(minimize.minimiseSecond(minimization, false));
 
-        //System.out.println("\n\n\n\n\n\n");
 
-        //TableMinimize tableMinimize = new TableMinimize();
+        minimization = minimize.minimise(solver.getPcnf().getNormalForm());
+        System.out.println(minimization);
+        System.out.println(minimize.minimiseSecond(minimization, false));
 
-        //tableMinimize.tableMinimize(solver.getPcnf().getNormalForm());
+
+        TableMinimize tableMinimize = new TableMinimize();
+
+        //System.out.println(tableMinimize.tableMinimize(solver.getPdnf().getNormalForm()));
+
+        //System.out.println(tableMinimize.tableMinimize(solver.getPcnf().getNormalForm()));
 
     }
 }
