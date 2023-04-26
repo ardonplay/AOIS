@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class Solver {
 
-  public static List<String> getAllSymbols(LexemeBuffer lexemeBuffer) {
+  public static List<String> getSymbols(LexemeBuffer lexemeBuffer) {
     return lexemeBuffer.lexemes.stream().filter(lexeme -> lexeme.symbol != null)
         .map(lexeme -> lexeme.symbol.name).toList();
   }

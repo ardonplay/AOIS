@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.ardonplay.logic.LogicalOperations.toDecimal;
-import static org.ardonplay.logic.Solver.getAllSymbols;
+import static org.ardonplay.logic.Solver.getSymbols;
 import static org.ardonplay.logic.Solver.lexAnalyze;
 
 @Getter
@@ -27,6 +27,11 @@ public class LogicalExpressionSolver {
 
     final String expressionText;
 
+
+    public static List<String> getAllSymbols() {
+        return allSymbols;
+    }
+
     private static List<String> allSymbols;
 
     public LogicalExpressionSolver(String expressionText){
@@ -34,7 +39,7 @@ public class LogicalExpressionSolver {
         List<Lexeme> lexemes = lexAnalyze(expressionText);
         LexemeBuffer lexemeBuffer = new LexemeBuffer(lexemes);
 
-        allSymbols = getAllSymbols(lexemeBuffer);
+        allSymbols = getSymbols(lexemeBuffer);
 
         allSymbols = allSymbols.stream().distinct().collect(Collectors.toList());
 
