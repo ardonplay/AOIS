@@ -13,10 +13,10 @@ public class TableMinimize {
         this.minimize = new AnalyticalMinimize();
     }
 
-    public List<List<String>> tableMinimize(List<List<String>> constituents){
+    public List<List<String>> tableMinimize(List<List<String>> constituents, boolean pdnf){
+        List<List<String>> minimizeList = minimize.minimise(constituents, pdnf);
 
-        List<List<String>> minimizeList = minimize.minimise(constituents);
-        List<List<String>> output =  new ArrayList<>();
+        List<List<String>> output =  new MinimizeList(pdnf);
 
         int[][] table = new int[minimizeList.size()][constituents.size()];
 

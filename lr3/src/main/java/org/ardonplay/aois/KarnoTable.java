@@ -3,7 +3,6 @@ package org.ardonplay.aois;
 import org.ardonplay.aois.KarnoData.DataSet;
 import org.ardonplay.aois.KarnoData.DataTable;
 
-import javax.xml.crypto.Data;
 import java.util.*;
 
 public class KarnoTable {
@@ -28,10 +27,13 @@ public class KarnoTable {
     }
 
 
-    public List<List<String>> minimize(Map<List<Integer>, Integer> logicalTable, List<String> symbols){
-        List<List<String>> output = new ArrayList<>();
+    public List<List<String>> minimize(Map<List<Integer>, Integer> logicalTable, List<String> symbols, boolean pdnf){
+        List<List<String>> output = new MinimizeList(pdnf);
 
-        int[][] karnoTable = new int[2][4];
+        int WEIGHT = 4;
+        int HEIGHT = 2;
+
+        int[][] karnoTable = new int[HEIGHT][WEIGHT];
 
         for(int i =0; i< karnoTable.length; i++){
             for(int j =0; j < karnoTable[i].length; j++){
@@ -41,6 +43,11 @@ public class KarnoTable {
 
         DataTable table = new DataTable(karnoTable);
 
+
+        if(!pdnf){
+            table.reverse();
+            //dataSet.reverse();
+        }
 
         List<DataTable> figures = new ArrayList<>();
         for(DataTable dataTable: dataSet.getTables()){
@@ -61,7 +68,6 @@ public class KarnoTable {
         }
 
 
-
         for(DataTable dataTable: figures){
             List<List<Integer>> indexes = new ArrayList<>();
             for(int i =0; i < dataTable.table().length; i++){
@@ -73,7 +79,7 @@ public class KarnoTable {
             }
 
 
-            List<Integer> commonIndexes = new ArrayList<>();
+            Map<Integer, Integer> commonIndexes = new HashMap<>();
 
 
             for (int i = 0; i < indexes.get(0).size(); i++) {
@@ -86,12 +92,17 @@ public class KarnoTable {
                     }
                 }
                 if (isCommon) {
-                    commonIndexes.add(i);
+                    commonIndexes.put(i, commonValue);
                 }
             }
             List<String> stringIndex = new ArrayList<>();
-            for(Integer index: commonIndexes){
-               stringIndex.add(symbols.get(index));
+            for(Integer index: commonIndexes.keySet()){
+                if(commonIndexes.get(index) == 1) {
+                    stringIndex.add(symbols.get(index));
+                }
+                else {
+                    stringIndex.add("!" + symbols.get(index));
+                }
             }
             output.add(stringIndex);
 

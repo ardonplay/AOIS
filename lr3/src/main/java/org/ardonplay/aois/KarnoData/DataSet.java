@@ -36,6 +36,11 @@ public class DataSet {
                 {0, 0, 0, 0}, {0, 0, 0, 1}}));
     }
 
+    public void reverse(){
+        for(DataTable table: tables){
+            table.reverse();
+        }
+    }
     private final List<DataTable> tables;
 
     public List<DataTable> getTables() {
