@@ -44,15 +44,15 @@ public class Main {
 //        System.out.println(tableMinimize.tableMinimize(solver.getPcnf().getNormalForm()));
 
         DataTable dataTable = new DataTable(new int[][]{
-                {0,1,1,0}, {0, 1, 1, 1}});
+                {0,1,1,0}, {0, 1, 1, 0}});
 
-        DataTable dataTable1 = new DataTable(new int[][]{{0,0,0,0}, {1,1,1,1}});
+        DataTable dataTable1 = new DataTable(new int[][]{{0,1,0,0}, {0,0,0,0}});
 
 //        System.out.println(Arrays.deepToString(dataTable1.table()));
 //
 //        System.out.println(Arrays.deepToString(dataTable.table()));
 
-        //System.out.println(dataTable.contains(dataTable1));
+        System.out.println(dataTable.contains(dataTable1));
 //        System.out.println(dataTable.contains(dataTable1));
     }
 }

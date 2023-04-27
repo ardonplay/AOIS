@@ -40,16 +40,39 @@ public class KarnoTable {
 
         DataTable table = new DataTable(karnoTable);
 
-        for(DataTable dataTable: dataSet.getTables()){
-            System.out.println(table.contains(dataTable));
-        }
 
-        for (int[] ints : karnoTable) {
-            for (int anInt : ints) {
-                System.out.print(anInt + " ");
+        List<DataTable> figures = new ArrayList<>();
+        for(DataTable dataTable: dataSet.getTables()){
+            if (table.contains(dataTable)){
+                if(!figures.isEmpty()) {
+                    List<DataTable> tempFigures = new ArrayList<>();
+                    for (DataTable figure : figures) {
+                        System.out.println(figure.contains(dataTable));
+                        System.out.println(Arrays.deepToString(dataTable.table()));
+                        if (!figure.contains(dataTable)) {
+                            tempFigures.add(dataTable);
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                    figures.addAll(tempFigures);
+                }
+                else {
+                    figures.add(dataTable);
+                }
             }
-            System.out.println();
         }
+//        for(DataTable table1: figures){
+//            System.out.println(Arrays.deepToString(table1.table()));
+//        }
+
+//        for (int[] ints : karnoTable) {
+//            for (int anInt : ints) {
+//                System.out.print(anInt + " ");
+//            }
+//            System.out.println();
+//        }
 
         return output;
     }
