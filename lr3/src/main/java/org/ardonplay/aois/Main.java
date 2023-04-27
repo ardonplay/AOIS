@@ -30,8 +30,6 @@ public class Main {
         System.out.println(tableMinimize.tableMinimize(solver.getPcnf().getNormalForm(), false));
 
 
-
-
         System.out.println("\n\tКарно!");
         KarnaughTable karnaughTable = new KarnaughTable();
 

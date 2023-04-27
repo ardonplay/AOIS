@@ -4,6 +4,7 @@ import org.ardonplay.logic.LogicalOperations;
 
 import java.util.*;
 
+
 public class AnalyticalMinimize {
     private final Map<String, Integer> symbols = new HashMap<>();
 

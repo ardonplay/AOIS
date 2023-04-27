@@ -1,5 +1,7 @@
 package org.ardonplay.aois.KarnaughTableData;
 
+import java.util.Arrays;
+
 public record DataTable(int[][] table) {
 
     public boolean contains(DataTable compared) {
@@ -29,5 +31,18 @@ public record DataTable(int[][] table) {
         }
     }
 
+    @Override
+    public String toString() {
+        StringBuilder output = new StringBuilder();
+
+        for(int[] ints: table){
+            for(int index: ints){
+                output.append(index).append("\t");
+            }
+            output.append("\n");
+        }
+
+        return String.valueOf(output);
+    }
 }
 

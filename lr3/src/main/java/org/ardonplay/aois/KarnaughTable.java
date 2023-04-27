@@ -106,6 +106,8 @@ public class KarnaughTable {
         return new DataTable(karnaughTable);
     }
 
+
+
     public List<List<String>> minimize(Map<List<Integer>, Integer> logicalTable, List<String> symbols, boolean pdnf) {
         List<List<String>> output = new MinimizeList(pdnf);
 
