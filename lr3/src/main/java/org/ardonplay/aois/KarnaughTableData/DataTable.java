@@ -1,6 +1,4 @@
-package org.ardonplay.aois.KarnoData;
-
-import java.util.Arrays;
+package org.ardonplay.aois.KarnaughTableData;
 
 public record DataTable(int[][] table) {
 

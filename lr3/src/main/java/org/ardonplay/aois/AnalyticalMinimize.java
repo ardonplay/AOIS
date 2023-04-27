@@ -118,6 +118,22 @@ public class AnalyticalMinimize {
         return output;
     }
 
+    private List<Integer> getCountAndIndex(List<String> variable1, List<String> variable2){
+        int count = 0;
+        boolean finded = false;
+        int index = 0;
+        for (int k = 0; k < variable1.size(); k++) {
+            if (Objects.equals(variable1.get(k), "!" + variable2.get(k)) ||
+                    Objects.equals("!" + variable1.get(k), variable2.get(k))) {
+                count++;
+            }
+            if (count == 1 && !finded) {
+                index = k;
+                finded = true;
+            }
+        }
+        return List.of(count, index);
+    }
 
     public List<List<String>> minimise(List<List<String>> constituents, boolean pdnf) {
 
@@ -129,29 +145,14 @@ public class AnalyticalMinimize {
 
         for (int i = 0; i < constituents.size(); i++) {
             for (int j = i + 1; j < constituents.size(); j++) {
-                List<String> variable1 = constituents.get(i);
-                List<String> variable2 = constituents.get(j);
-                int count = 0;
-                int index = 0;
-                boolean finded = false;
-                for (int k = 0; k < variable1.size(); k++) {
-                    if (Objects.equals(variable1.get(k), "!" + variable2.get(k)) ||
-                            Objects.equals("!" + variable1.get(k), variable2.get(k))) {
-                        count++;
-                    }
-                    if (count == 1 && !finded) {
-                        index = k;
-                        finded = true;
-                    }
-                }
-                if (count == 1) {
+                List<Integer> countAndIndex = getCountAndIndex(constituents.get(i), constituents.get(j));
+                if (countAndIndex.get(0) == 1) {
                     List<String> tempList = new ArrayList<>(constituents.get(j));
-                    tempList.remove(index);
+                    tempList.remove((int) countAndIndex.get(1));
                     output.add(tempList);
                 }
             }
         }
-
 
         return output;
     }

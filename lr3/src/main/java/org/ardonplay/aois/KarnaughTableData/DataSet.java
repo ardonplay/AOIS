@@ -1,4 +1,4 @@
-package org.ardonplay.aois.KarnoData;
+package org.ardonplay.aois.KarnaughTableData;
 
 import java.util.List;
 
@@ -36,6 +36,7 @@ public class DataSet {
                 {0, 0, 0, 0}, {0, 0, 0, 1}}));
     }
 
+    @Deprecated
     public void reverse(){
         for(DataTable table: tables){
             table.reverse();
