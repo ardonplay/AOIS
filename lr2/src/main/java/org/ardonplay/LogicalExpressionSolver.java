@@ -9,7 +9,9 @@ import org.ardonplay.logic.logicalForms.Pcnf;
 import org.ardonplay.logic.logicalForms.Pdnf;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.ardonplay.logic.LogicalOperations.toDecimal;
@@ -28,6 +30,19 @@ public class LogicalExpressionSolver {
     final String expressionText;
 
 
+    final private Map<List<Integer>, Integer> logicalTable =  new HashMap<>();
+
+
+    private void setLogicalTable(){
+        for(int i =0; i < map.getTruthMap().get(expressionText).size(); i++){
+            List<Integer> logicalRow = new ArrayList<>();
+            for(String s: LogicalExpressionSolver.getAllSymbols()){
+                logicalRow.add(map.getTruthMap().get(s).get(i));
+            }
+
+            logicalTable.put(logicalRow, map.getTruthMap().get(expressionText).get(i));
+        }
+    }
     public static List<String> getAllSymbols() {
         return allSymbols;
     }
@@ -50,6 +65,8 @@ public class LogicalExpressionSolver {
         map.put(expressionText, new ArrayList<>());
 
         map.createTable(expressionText, lexemeBuffer, allSymbols);
+
+        setLogicalTable();
 
         pcnf = new Pcnf(map.getTruthMap(), expressionText);
         pdnf = new Pdnf(map.getTruthMap(), expressionText);
