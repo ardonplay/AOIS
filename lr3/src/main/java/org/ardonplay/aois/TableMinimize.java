@@ -1,9 +1,6 @@
 package org.ardonplay.aois;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class TableMinimize {
 
@@ -31,10 +28,17 @@ public class TableMinimize {
         return table;
     }
 
-    public void printTable(int[][] table){
+    public void printTable(int[][] table, List<List<String>>  minimizeList, List<List<String>> constituents, boolean pdnf){
+        System.out.print("\t\t");
+        for(List<String> constituent: constituents){
+            System.out.print(constituent + "\t\t");
+        }
+        System.out.println();
+        Iterator<List<String>> iterator = minimizeList.iterator();
         for (int[] ints : table) {
+            System.out.print(iterator.next() + "\t\t");
             for (int anInt : ints) {
-                System.out.print(anInt + " ");
+                System.out.print(anInt + "\t\t\t\t");
             }
             System.out.println();
         }
@@ -62,7 +66,7 @@ public class TableMinimize {
 
         int[][] table = generateTable(minimizeList, constituents);
 
-        printTable(table);
+        printTable(table, minimizeList, constituents, pdnf);
 
         for(int k = 0; k < minimizeList.size(); k++) {
             boolean unique = false;
