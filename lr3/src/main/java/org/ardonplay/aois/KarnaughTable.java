@@ -51,13 +51,22 @@ public class KarnaughTable {
     }
 
 
-    private List<String> indexesToString(Map<Integer, Integer> commonIndexes, List<String> symbols) {
+    private List<String> indexesToString(Map<Integer, Integer> commonIndexes, List<String> symbols, boolean pdnf) {
         List<String> stringIndex = new ArrayList<>();
         for (Integer index : commonIndexes.keySet()) {
-            if (commonIndexes.get(index) == 1) {
-                stringIndex.add(symbols.get(index));
-            } else {
-                stringIndex.add("!" + symbols.get(index));
+            if(pdnf) {
+                if (commonIndexes.get(index) == 1) {
+                    stringIndex.add(symbols.get(index));
+                } else {
+                    stringIndex.add("!" + symbols.get(index));
+                }
+            }
+            else {
+                if (commonIndexes.get(index) == 0) {
+                    stringIndex.add(symbols.get(index));
+                } else {
+                    stringIndex.add("!" + symbols.get(index));
+                }
             }
         }
         return stringIndex;
@@ -144,7 +153,7 @@ public class KarnaughTable {
 
             Map<Integer, Integer> commonIndexes = getCommonIndexes(indexes);
 
-            output.add(indexesToString(commonIndexes, symbols));
+            output.add(indexesToString(commonIndexes, symbols, pdnf));
 
         }
         printTable(table, symbols);
