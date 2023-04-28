@@ -7,7 +7,10 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        LogicalExpressionSolver solver = new LogicalExpressionSolver("(A*B)+C");
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Type an expression >>> ");
+        LogicalExpressionSolver solver = new LogicalExpressionSolver(scanner.nextLine());
 
         System.out.println(solver);
         AnalyticalMinimize minimize = new AnalyticalMinimize();

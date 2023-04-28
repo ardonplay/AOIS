@@ -63,6 +63,25 @@ public class KarnaughTable {
         return stringIndex;
     }
 
+    public void printTable(DataTable table, List<String> symbols){
+        List<String> leftSymbols = new ArrayList<>(Arrays.asList("!A", "A"));
+
+        List<String> topSymbols = new ArrayList<>(Arrays.asList("!B!C", "!BC", "BC", "B!C"));
+
+        System.out.print("  ");
+        for(String topSymbol: topSymbols){
+            System.out.print(topSymbol + "\t\t");
+        }
+        System.out.println();
+        Iterator<String> iterator = leftSymbols.iterator();
+        for(int i =0; i < table.table().length; i++){
+            System.out.print(iterator.next() + "\t");
+            for(int j =0; j< table.table()[i].length; j++){
+                System.out.print(table.table()[i][j] + "\t\t");
+            }
+            System.out.println();
+        }
+    }
     private Map<Integer, Integer> getCommonIndexes(List<List<Integer>> indexes) {
         Map<Integer, Integer> commonIndexes = new HashMap<>();
 
@@ -128,7 +147,7 @@ public class KarnaughTable {
             output.add(indexesToString(commonIndexes, symbols));
 
         }
-
+        printTable(table, symbols);
         return output;
     }
 }
