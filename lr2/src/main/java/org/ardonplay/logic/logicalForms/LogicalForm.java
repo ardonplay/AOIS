@@ -20,6 +20,8 @@ public abstract class LogicalForm {
 
     protected char externalConnection;
 
+    protected int checker;
+
     protected List<List<String>> normalForm = new ArrayList<>() {
         @Override
         public String toString() {
@@ -76,7 +78,7 @@ public abstract class LogicalForm {
             for (Map.Entry<String, List<Integer>> entry : map.entrySet()) {
                 if (!Objects.equals(entry.getKey(), LexemeString)) {
                     number.append(entry.getValue().get(integer));
-                    if (entry.getValue().get(integer) == 0) {
+                    if (entry.getValue().get(integer) == checker) {
                         constiteunta.add("!" + entry.getKey());
                     } else {
                         constiteunta.add(entry.getKey());

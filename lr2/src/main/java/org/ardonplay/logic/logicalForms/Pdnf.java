@@ -10,6 +10,7 @@ public class Pdnf extends LogicalForm{
         this.externalConnection = '+';
         this.internalConnection = '*';
         this.index = 1;
+        this.checker = 0;
         this.create(map, LexemeString);
     }
 }

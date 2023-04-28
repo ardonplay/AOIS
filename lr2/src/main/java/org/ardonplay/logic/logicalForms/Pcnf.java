@@ -9,6 +9,7 @@ public class Pcnf extends LogicalForm{
         this.externalConnection = '*';
         this.internalConnection = '+';
         this.index = 0;
+        this.checker = 1;
         this.create(map, LexemeString);
     }
 }
