@@ -10,6 +10,12 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
+        System.out.println("Symbols\n" +
+                "+ — disjunction\n" +
+                "* — conjuction\n" +
+                "~ — equivalence\n" +
+                "@ — implication\n" +
+                "! — not");
         System.out.print("Type an expression >>> ");
         LogicalExpressionSolver solver = new LogicalExpressionSolver(scanner.nextLine());
 

@@ -1,3 +1,6 @@
+//由Vladimir Moshchuk制作，或ardonplay，2023。 白俄罗斯明斯克
+//
+//此类描述了最小化sdnf和sknf的计算和表格方法
 package org.ardonplay.aois;
 
 import java.util.*;

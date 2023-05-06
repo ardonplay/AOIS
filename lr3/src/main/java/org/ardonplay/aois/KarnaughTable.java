@@ -1,9 +1,11 @@
+//由Vladimir Moshchuk制作，或ardonplay，2023。 白俄罗斯明斯克
+//
+//此类描述用于最小化sdnf和sknf的表格(Karnaught)方法
 package org.ardonplay.aois;
 
 import org.ardonplay.aois.KarnaughTableData.DataSet;
 import org.ardonplay.aois.KarnaughTableData.DataTable;
 import org.ardonplay.aois.KarnaughTableData.KarnaughtGenerator;
-import org.ardonplay.logic.Symbol;
 
 import java.io.IOException;
 import java.util.*;
@@ -14,14 +16,16 @@ public class KarnaughTable {
     final private DataSet dataSet;
 
 
-    int WEIGHT = 4;
-    int HEIGHT = 2;
+    final private int rows;
+    final private  int columns;
 
 
 
     public KarnaughTable(List<String> symbols) {
         this.dataSet = new DataSet();
-        KarnaughtGenerator generator = new KarnaughtGenerator();
+        rows = (int) Math.pow(2, (float) (symbols.size() / 2));
+        columns = (int) Math.pow(2, (float) (symbols.size() - (symbols.size() / 2)));
+        KarnaughtGenerator generator = new KarnaughtGenerator(rows, columns);
         this.logicalIndexes = generator.generateLogicalIndexes(symbols);
     }
 
@@ -68,7 +72,13 @@ public class KarnaughTable {
     }
 
     public void printTable(DataTable table, List<String> symbols){
-        List<String> leftSymbols = new ArrayList<>(Arrays.asList("!A", "A"));
+        int leftSymbolsSize = (int) Math.pow(2, (float) (symbols.size() / 2))/2;
+        List<String> leftSymbols = new ArrayList<>();
+        for(int i =0; i < leftSymbolsSize; i++){
+            leftSymbols.add(symbols.get(i));
+            leftSymbols.add("!" + symbols.get(i));
+        }
+
 
         List<String> topSymbols = new ArrayList<>(Arrays.asList("!B!C", "!BC", "BC", "B!C"));
 
@@ -119,7 +129,7 @@ public class KarnaughTable {
     }
 
     public DataTable generateKarnaughTable(Map<List<Integer>, Integer> logicalTable) {
-        int[][] karnaughTable = new int[HEIGHT][WEIGHT];
+        int[][] karnaughTable = new int[rows][columns];
 
         for (int i = 0; i < karnaughTable.length; i++) {
             for (int j = 0; j < karnaughTable[i].length; j++) {

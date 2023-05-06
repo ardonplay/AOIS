@@ -3,6 +3,14 @@ package org.ardonplay.aois.KarnaughTableData;
 import java.util.*;
 
 public class KarnaughtGenerator {
+    final private int rows;
+    final private int columns;
+
+    public KarnaughtGenerator(int rows, int columns){
+
+        this.rows = rows;
+        this.columns = columns;
+    }
 
     private List<Integer> iterator(List<Integer> binaryList1) {
 
@@ -33,8 +41,6 @@ public class KarnaughtGenerator {
 
     public Map<List<Integer>, List<Integer>> generateLogicalIndexes(List<String> symbols) {
         Map<List<Integer>, List<Integer>> logicalIndexes = new HashMap<>();
-        int rows = (int) Math.pow(2, (float) (symbols.size() / 2));
-        int columns = (int) Math.pow(2, (float) (symbols.size() - (symbols.size() / 2)));
 
         List<Integer> value = Collections.nCopies(symbols.size(), 0);
 

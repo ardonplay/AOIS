@@ -1,5 +1,10 @@
+//由Vladimir Moshchuk制作，或ardonplay，2023。 白俄罗斯明斯克
+//
+//此类描述了最小化sdnf和sknf的计算方法
 package org.ardonplay.aois;
 
+
+import org.ardonplay.logic.LogicalOperations;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -9,7 +14,7 @@ public class CalculationMinimize {
     public List<List<String>> minimise(List<List<String>> constituents, FormulaType type) {
         List<List<String>> gl = infinityGluing(constituents);
         gl = removeRedundancy(gl, type);
-        gl = gluing(gl);
+        gl = infinityGluing(gl);
         return new MinimizeList(gl, type);
     }
 
@@ -31,16 +36,13 @@ public class CalculationMinimize {
         Set<List<String>> exclude = new HashSet<>();
 
         for (int i = 0; i < constituents.size(); i++) {
-            List<String> implicantI = constituents.get(i);
-
             for (int j = 0; j < constituents.size(); j++) {
                 if (i == j)
                     continue;
-                List<String> implicantJ = constituents.get(j);
-                List<String> fusion = tryGluing(implicantI, implicantJ);
+                List<String> fusion = tryGluing(constituents.get(i), constituents.get(j));
                 if (fusion != null) {
-                    exclude.add(implicantI);
-                    exclude.add(implicantJ);
+                    exclude.add(constituents.get(i));
+                    exclude.add(constituents.get(j));
                     result.add(fusion);
 
                 }
@@ -54,15 +56,15 @@ public class CalculationMinimize {
         return Objects.equals("!" + firstTerm, secondTerm) || Objects.equals(firstTerm, "!" + secondTerm);
     }
 
-    private List<String> tryGluing(List<String> firstImplicant, List<String> secondImplicant) {
+    private List<String> tryGluing(List<String> first, List<String> second) {
         int differencesCount = 0;
         int differenceIndex = -1;
-        if (firstImplicant.size() == 1 || secondImplicant.size() == 1)
+        if (first.size() == 1 || second.size() == 1)
             return null;
 
-        for (int i = 0; i < firstImplicant.size(); i++) {
-            String term1 = firstImplicant.get(i);
-            String term2 = secondImplicant.get(i);
+        for (int i = 0; i < first.size(); i++) {
+            String term1 = first.get(i);
+            String term2 = second.get(i);
 
             if (!term1.equals(term2)) {
                 if (isOpposite(term1, term2)) {
@@ -77,8 +79,8 @@ public class CalculationMinimize {
         }
 
         if (differencesCount == 1) {
-            List<String> result = new ArrayList<>(firstImplicant);
-            result.remove(firstImplicant.get(differenceIndex));
+            List<String> result = new ArrayList<>(first);
+            result.remove(first.get(differenceIndex));
             return result;
         } else {
             return null;
@@ -94,14 +96,14 @@ public class CalculationMinimize {
 
 
         for (int i = 0; i < constituents.size(); i++) {
-            List<String> implicantI = constituents.get(i);
-            Map<String, Integer> valuesMap = createValuesMap(implicantI, type);
+            List<String> implicant = constituents.get(i);
+            Map<String, Integer> valuesMap = createValuesMap(implicant, type);
 
             boolean formulaValue = formulaValue(
-                    constituents.stream().filter(c -> c != implicantI).collect(Collectors.toList()), valuesMap, type);
+                    constituents.stream().filter(c -> c != implicant).collect(Collectors.toList()), valuesMap, type);
 
             if (formulaValue) {
-                exclude.add(implicantI);
+                exclude.add(implicant);
             }
         }
         result.removeAll(exclude);
@@ -162,33 +164,40 @@ public class CalculationMinimize {
         }
     }
 
-    private Integer[] firstAndSecondToIntegerValue(Integer first, Integer second, List<String> implicant) {
-        Integer[] firstAndSecond = new Integer[2];
-        firstAndSecond[0] = Objects.requireNonNullElseGet(first, () -> implicant.get(0).startsWith("!") ? 1 : 0);
-        firstAndSecond[1] = Objects.requireNonNullElseGet(second, () -> implicant.get(1).startsWith("!") ? 1 : 0);
+    static class FirstAndSecond {
+        Integer first;
+        Integer second;
+
+        public FirstAndSecond(Integer first, Integer second) {
+            this.first = first;
+            this.second = second;
+        }
+    }
+
+    private FirstAndSecond firstAndSecondToIntegerValue(FirstAndSecond firstAndSecond, List<String> implicant) {
+        firstAndSecond.first = Objects.requireNonNullElseGet(firstAndSecond.first, () -> implicant.get(0).startsWith("!") ? 1 : 0);
+        firstAndSecond.second = Objects.requireNonNullElseGet(firstAndSecond.second, () -> implicant.get(1).startsWith("!") ? 1 : 0);
         return firstAndSecond;
     }
 
     private Integer disjunction(List<String> implicant, Map<String, Integer> valuesMap) {
         if (implicant.size() > 2) {
-            Integer first = valuesMap.get(implicant.get(0));
-            Integer second = valuesMap.get(implicant.get(0));
-            Integer[] firstAndSecond = firstAndSecondToIntegerValue(first, second, implicant);
-            return firstAndSecond[0] * firstAndSecond[1];
-        }
-        else {
+
+            FirstAndSecond firstAndSecond = new FirstAndSecond(valuesMap.get(implicant.get(0)),
+                    valuesMap.get(implicant.get(0)));
+            firstAndSecondToIntegerValue(firstAndSecond, implicant);
+            return LogicalOperations.conjunction(firstAndSecond.first, firstAndSecond.second);
+        } else {
             return 1;
         }
     }
 
     private Integer conjunction(List<String> implicant, Map<String, Integer> valuesMap) {
         if (implicant.size() > 2) {
-            Integer first = valuesMap.get(implicant.get(0));
-            Integer second = valuesMap.get(implicant.get(0));
-
-            Integer[] firstAndSecond = firstAndSecondToIntegerValue(first, second, implicant);
-
-            return firstAndSecond[0] + firstAndSecond[1] >= 1 ? 1 : 0;
+            FirstAndSecond firstAndSecond = new FirstAndSecond(valuesMap.get(implicant.get(0)),
+                    valuesMap.get(implicant.get(0)));
+            firstAndSecondToIntegerValue(firstAndSecond, implicant);
+            return LogicalOperations.disjunction(firstAndSecond.first, firstAndSecond.second);
         } else {
             return 0;
         }
