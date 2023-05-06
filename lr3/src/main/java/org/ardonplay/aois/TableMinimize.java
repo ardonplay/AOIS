@@ -4,10 +4,10 @@ import java.util.*;
 
 public class TableMinimize {
 
-    final private AnalyticalMinimize minimize;
+    final private CalculationMinimize minimize;
 
     public TableMinimize(){
-        this.minimize = new AnalyticalMinimize();
+        this.minimize = new CalculationMinimize();
     }
 
 
@@ -28,7 +28,7 @@ public class TableMinimize {
         return table;
     }
 
-    public void printTable(int[][] table, List<List<String>>  minimizeList, List<List<String>> constituents, boolean pdnf){
+    public void printTable(int[][] table, List<List<String>>  minimizeList, List<List<String>> constituents){
         System.out.print("\t\t");
         for(List<String> constituent: constituents){
             System.out.print(constituent + "\t\t");
@@ -59,14 +59,15 @@ public class TableMinimize {
         return coincidences;
     }
 
-    public List<List<String>> tableMinimize(List<List<String>> constituents, boolean pdnf){
-        List<List<String>> minimizeList = minimize.minimise(constituents, pdnf);
+    public List<List<String>> tableMinimize(List<List<String>> constituents, FormulaType type){
+        List<List<String>> minimizeList = minimize.gluing(constituents);
+        minimizeList = minimize.gluing(minimizeList);
 
-        List<List<String>> output =  new MinimizeList(pdnf);
+        List<List<String>> output =  new MinimizeList(type);
 
         int[][] table = generateTable(minimizeList, constituents);
 
-        printTable(table, minimizeList, constituents, pdnf);
+        printTable(table, minimizeList, constituents);
 
         for(int k = 0; k < minimizeList.size(); k++) {
             boolean unique = false;

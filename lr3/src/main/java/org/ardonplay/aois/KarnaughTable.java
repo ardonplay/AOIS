@@ -2,7 +2,10 @@ package org.ardonplay.aois;
 
 import org.ardonplay.aois.KarnaughTableData.DataSet;
 import org.ardonplay.aois.KarnaughTableData.DataTable;
+import org.ardonplay.aois.KarnaughTableData.KarnaughtGenerator;
+import org.ardonplay.logic.Symbol;
 
+import java.io.IOException;
 import java.util.*;
 
 public class KarnaughTable {
@@ -10,24 +13,16 @@ public class KarnaughTable {
 
     final private DataSet dataSet;
 
+
     int WEIGHT = 4;
     int HEIGHT = 2;
 
-    private void setLogicalIndexes() {
-        logicalIndexes.put(Arrays.asList(0, 0), Arrays.asList(0, 0, 0));
-        logicalIndexes.put(Arrays.asList(0, 1), Arrays.asList(0, 0, 1));
-        logicalIndexes.put(Arrays.asList(0, 2), Arrays.asList(0, 1, 1));
-        logicalIndexes.put(Arrays.asList(0, 3), Arrays.asList(0, 1, 0));
-        logicalIndexes.put(Arrays.asList(1, 0), Arrays.asList(1, 0, 0));
-        logicalIndexes.put(Arrays.asList(1, 1), Arrays.asList(1, 0, 1));
-        logicalIndexes.put(Arrays.asList(1, 2), Arrays.asList(1, 1, 1));
-        logicalIndexes.put(Arrays.asList(1, 3), Arrays.asList(1, 1, 0));
-    }
 
-    public KarnaughTable() {
-        this.logicalIndexes = new HashMap<>();
+
+    public KarnaughTable(List<String> symbols) {
         this.dataSet = new DataSet();
-        setLogicalIndexes();
+        KarnaughtGenerator generator = new KarnaughtGenerator();
+        this.logicalIndexes = generator.generateLogicalIndexes(symbols);
     }
 
     private List<DataTable> getFigures(DataTable table) {
@@ -51,10 +46,10 @@ public class KarnaughTable {
     }
 
 
-    private List<String> indexesToString(Map<Integer, Integer> commonIndexes, List<String> symbols, boolean pdnf) {
+    private List<String> indexesToString(Map<Integer, Integer> commonIndexes, List<String> symbols, FormulaType type) {
         List<String> stringIndex = new ArrayList<>();
         for (Integer index : commonIndexes.keySet()) {
-            if(pdnf) {
+            if(type == FormulaType.PDNF) {
                 if (commonIndexes.get(index) == 1) {
                     stringIndex.add(symbols.get(index));
                 } else {
@@ -136,12 +131,15 @@ public class KarnaughTable {
 
 
 
-    public List<List<String>> minimize(Map<List<Integer>, Integer> logicalTable, List<String> symbols, boolean pdnf) {
-        List<List<String>> output = new MinimizeList(pdnf);
+    public List<List<String>> minimize(Map<List<Integer>, Integer> logicalTable, List<String> symbols, FormulaType type) throws IOException {
+        if(symbols.size() > 3){
+           throw new IOException();
+        }
+        List<List<String>> output = new MinimizeList(type);
 
         DataTable table = generateKarnaughTable(logicalTable);
 
-        if (!pdnf) {
+        if (type != FormulaType.PDNF) {
             table.reverse();
         }
 
@@ -153,7 +151,7 @@ public class KarnaughTable {
 
             Map<Integer, Integer> commonIndexes = getCommonIndexes(indexes);
 
-            output.add(indexesToString(commonIndexes, symbols, pdnf));
+            output.add(indexesToString(commonIndexes, symbols, type));
 
         }
         printTable(table, symbols);
