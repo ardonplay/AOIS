@@ -4,6 +4,13 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        System.out.println("""
+                Symbols
+                + — disjunction
+                * — conjuction
+                ~ — equivalence
+                @ — implication
+                ! — not""");
         Scanner stringScanner = new Scanner(System.in);
         System.out.print("Type an expression:");
         String expressionText = stringScanner.nextLine();
@@ -12,7 +19,6 @@ public class Main {
 
         System.out.println(solver);
 
-        solver.getPdnf().getNormalForm().forEach(System.out::println);
 
     }
 
