@@ -6,6 +6,7 @@ package org.ardonplay.aois;
 import org.ardonplay.aois.KarnaughTableData.DataSet;
 import org.ardonplay.aois.KarnaughTableData.DataTable;
 import org.ardonplay.aois.KarnaughTableData.KarnaughtGenerator;
+import org.ardonplay.logic.LogicalOperations;
 
 import java.io.IOException;
 import java.util.*;
@@ -29,20 +30,23 @@ public class KarnaughTable {
         this.logicalIndexes = generator.generateLogicalIndexes(symbols);
     }
 
+    private DataTable matrixDisjunctor(DataTable first, DataTable second){
+        DataTable output = new DataTable(new int[first.table().length][first.table()[0].length]);
+        for(int i =0; i < first.table().length; i++){
+            for(int j =0; j < first.table()[i].length; j++){
+                output.table()[i][j] = LogicalOperations.disjunction(first.table()[i][j], second.table()[i][j]);
+            }
+        }
+        return output;
+    }
     private List<DataTable> getFigures(DataTable table) {
         List<DataTable> figures = new ArrayList<>();
+        DataTable dataTablesum = new DataTable(new int[rows][columns]);
         for (DataTable dataTable : dataSet.getTables()) {
             if (table.contains(dataTable)) {
-                if (!figures.isEmpty()) {
-                    List<Boolean> booleans = new ArrayList<>();
-                    for (DataTable figure : figures) {
-                        booleans.add(figure.contains(dataTable));
-                    }
-                    if (!booleans.contains(true)) {
+                if(!dataTablesum.contains(dataTable)){
+                        dataTablesum = matrixDisjunctor(dataTablesum, dataTable);
                         figures.add(dataTable);
-                    }
-                } else {
-                    figures.add(dataTable);
                 }
             }
         }
