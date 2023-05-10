@@ -1,8 +1,14 @@
+//由Vladimir Moshchuk制作，或ardonplay，2023。 白俄罗斯明斯克
+//
+//此类描述用于最小化sdnf和sknf的表格(Karnaught)方法
 package org.ardonplay.aois;
 
 import org.ardonplay.aois.KarnaughTableData.DataSet;
 import org.ardonplay.aois.KarnaughTableData.DataTable;
+import org.ardonplay.aois.KarnaughTableData.KarnaughtGenerator;
+import org.ardonplay.logic.LogicalOperations;
 
+import java.io.IOException;
 import java.util.*;
 
 public class KarnaughTable {
@@ -10,40 +16,37 @@ public class KarnaughTable {
 
     final private DataSet dataSet;
 
-    int WEIGHT = 4;
-    int HEIGHT = 2;
 
-    private void setLogicalIndexes() {
-        logicalIndexes.put(Arrays.asList(0, 0), Arrays.asList(0, 0, 0));
-        logicalIndexes.put(Arrays.asList(0, 1), Arrays.asList(0, 0, 1));
-        logicalIndexes.put(Arrays.asList(0, 2), Arrays.asList(0, 1, 1));
-        logicalIndexes.put(Arrays.asList(0, 3), Arrays.asList(0, 1, 0));
-        logicalIndexes.put(Arrays.asList(1, 0), Arrays.asList(1, 0, 0));
-        logicalIndexes.put(Arrays.asList(1, 1), Arrays.asList(1, 0, 1));
-        logicalIndexes.put(Arrays.asList(1, 2), Arrays.asList(1, 1, 1));
-        logicalIndexes.put(Arrays.asList(1, 3), Arrays.asList(1, 1, 0));
-    }
+    final private int rows;
+    final private  int columns;
 
-    public KarnaughTable() {
-        this.logicalIndexes = new HashMap<>();
+
+
+    public KarnaughTable(List<String> symbols) {
         this.dataSet = new DataSet();
-        setLogicalIndexes();
+        rows = (int) Math.pow(2, (float) (symbols.size() / 2));
+        columns = (int) Math.pow(2, (float) (symbols.size() - (symbols.size() / 2)));
+        KarnaughtGenerator generator = new KarnaughtGenerator(rows, columns);
+        this.logicalIndexes = generator.generateLogicalIndexes(symbols);
     }
 
+    private DataTable matrixDisjunctor(DataTable first, DataTable second){
+        DataTable output = new DataTable(new int[first.table().length][first.table()[0].length]);
+        for(int i =0; i < first.table().length; i++){
+            for(int j =0; j < first.table()[i].length; j++){
+                output.table()[i][j] = LogicalOperations.disjunction(first.table()[i][j], second.table()[i][j]);
+            }
+        }
+        return output;
+    }
     private List<DataTable> getFigures(DataTable table) {
         List<DataTable> figures = new ArrayList<>();
+        DataTable dataTablesum = new DataTable(new int[rows][columns]);
         for (DataTable dataTable : dataSet.getTables()) {
             if (table.contains(dataTable)) {
-                if (!figures.isEmpty()) {
-                    List<Boolean> booleans = new ArrayList<>();
-                    for (DataTable figure : figures) {
-                        booleans.add(figure.contains(dataTable));
-                    }
-                    if (!booleans.contains(true)) {
+                if(!dataTablesum.contains(dataTable)){
+                        dataTablesum = matrixDisjunctor(dataTablesum, dataTable);
                         figures.add(dataTable);
-                    }
-                } else {
-                    figures.add(dataTable);
                 }
             }
         }
@@ -51,10 +54,10 @@ public class KarnaughTable {
     }
 
 
-    private List<String> indexesToString(Map<Integer, Integer> commonIndexes, List<String> symbols, boolean pdnf) {
+    private List<String> indexesToString(Map<Integer, Integer> commonIndexes, List<String> symbols, FormulaType type) {
         List<String> stringIndex = new ArrayList<>();
         for (Integer index : commonIndexes.keySet()) {
-            if(pdnf) {
+            if(type == FormulaType.PDNF) {
                 if (commonIndexes.get(index) == 1) {
                     stringIndex.add(symbols.get(index));
                 } else {
@@ -73,7 +76,13 @@ public class KarnaughTable {
     }
 
     public void printTable(DataTable table, List<String> symbols){
-        List<String> leftSymbols = new ArrayList<>(Arrays.asList("!A", "A"));
+        int leftSymbolsSize = (int) Math.pow(2, (float) (symbols.size() / 2))/2;
+        List<String> leftSymbols = new ArrayList<>();
+        for(int i =0; i < leftSymbolsSize; i++){
+            leftSymbols.add(symbols.get(i));
+            leftSymbols.add("!" + symbols.get(i));
+        }
+
 
         List<String> topSymbols = new ArrayList<>(Arrays.asList("!B!C", "!BC", "BC", "B!C"));
 
@@ -124,7 +133,7 @@ public class KarnaughTable {
     }
 
     public DataTable generateKarnaughTable(Map<List<Integer>, Integer> logicalTable) {
-        int[][] karnaughTable = new int[HEIGHT][WEIGHT];
+        int[][] karnaughTable = new int[rows][columns];
 
         for (int i = 0; i < karnaughTable.length; i++) {
             for (int j = 0; j < karnaughTable[i].length; j++) {
@@ -136,12 +145,15 @@ public class KarnaughTable {
 
 
 
-    public List<List<String>> minimize(Map<List<Integer>, Integer> logicalTable, List<String> symbols, boolean pdnf) {
-        List<List<String>> output = new MinimizeList(pdnf);
+    public List<List<String>> minimize(Map<List<Integer>, Integer> logicalTable, List<String> symbols, FormulaType type) throws IOException {
+        if(symbols.size() > 3){
+           throw new IOException();
+        }
+        List<List<String>> output = new MinimizeList(type);
 
         DataTable table = generateKarnaughTable(logicalTable);
 
-        if (!pdnf) {
+        if (type != FormulaType.PDNF) {
             table.reverse();
         }
 
@@ -153,7 +165,7 @@ public class KarnaughTable {
 
             Map<Integer, Integer> commonIndexes = getCommonIndexes(indexes);
 
-            output.add(indexesToString(commonIndexes, symbols, pdnf));
+            output.add(indexesToString(commonIndexes, symbols, type));
 
         }
         printTable(table, symbols);

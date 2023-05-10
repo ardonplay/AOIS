@@ -27,6 +27,31 @@ public class MinimizeList extends ArrayList<List<String>>{
         }
     }
 
+    public MinimizeList(FormulaType type) {
+        super();
+        if(type == FormulaType.PDNF){
+            this.externalConnection = '+';
+            this.internalConnection = '*';
+        }
+        else {
+            this.externalConnection = '*';
+            this.internalConnection = '+';
+        }
+    }
+
+    public MinimizeList(List<List<String>> minimization, FormulaType type) {
+        super(minimization);
+
+        if(type == FormulaType.PDNF){
+            this.externalConnection = '+';
+            this.internalConnection = '*';
+        }
+        else {
+            this.externalConnection = '*';
+            this.internalConnection = '+';
+        }
+    }
+
     @Override
     public String toString() {
         StringBuilder string = new StringBuilder();
