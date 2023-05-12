@@ -1,10 +1,32 @@
 import hashTable.HashTable
+
 fun main(args: Array<String>) {
-    println("Hello World!")
+    val testVal = HashTable<Any, String>(4, loadFactor = 0.75f)
 
-    val testVal = HashTable<String, String>()
 
-    testVal.put("hi", "hello")
-    println(testVal["hi"])
-    println(testVal.containsValue("hello"))
+    testVal.put(1, "Rome")
+    testVal["hello"] = "похуй"
+
+    for(listes in testVal.list){
+        println(listes)
+    }
+    println()
+    println(testVal.remove("gren"))
+
+    for(listes in testVal.list){
+        println(listes)
+    }
+
+    println()
+    for(listes in testVal.list){
+        println(listes)
+    }
+
+    println()
+    testVal.replace(1, "Rome", "хуй")
+    for(listes in testVal.list){
+        println(listes)
+    }
+
+
 }

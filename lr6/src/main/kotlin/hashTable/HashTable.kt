@@ -2,30 +2,14 @@ package hashTable
 
 import java.util.*
 import java.util.Objects.hash
-import kotlin.collections.ArrayList
-import kotlin.collections.HashSet
 import kotlin.math.abs
 
-class HashTable<K, V>(private var capacity: Int = 16, private val loadFactor: Float = 0.75f) : Map<K, V> {
+class HashTable<K, V>(private var capacity: Int = 1 shl 4, private val loadFactor: Float = 0.75f) : Map<K, V> {
 
-    private var list: Array<LinkedList<Node<K, V>>?> = Array(size = capacity) { LinkedList() }
+    private val defaultCapacity = capacity
+    var list: Array<LinkedList<Entry<K, V>>?> = Array(size = capacity) { LinkedList() }
 
     private var indexCounter = 0
-
-    private class Node<K, V>(val key: K, val value: V) {
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (javaClass != other?.javaClass) return false
-
-            other as Node<*, *>
-
-            return key == other.key
-        }
-
-        override fun hashCode(): Int {
-            return key?.hashCode() ?: 0
-        }
-    }
 
     class Entry<K, V>(override val key: K, override var value: V) : Map.Entry<K, V> {
 
@@ -39,13 +23,14 @@ class HashTable<K, V>(private var capacity: Int = 16, private val loadFactor: Fl
 
             other as Entry<*, *>
 
-            return value == other.value
+            return key == other.key
         }
 
         override fun hashCode(): Int {
-            return value?.hashCode() ?: 0
+            return key?.hashCode() ?: 0
         }
     }
+
 
     override val entries: Set<Map.Entry<K, V>>
         get() {
@@ -74,17 +59,23 @@ class HashTable<K, V>(private var capacity: Int = 16, private val loadFactor: Fl
             return result
         }
     override val size: Int
-        get() = entries.size
+        get() = indexCounter
 
     override val values: Collection<V> = ArrayList(capacity)
 
     private fun resize() {
         capacity *= 2
-        val newList: Array<LinkedList<Node<K, V>>?> = Array(size = capacity) { LinkedList() }
+        val newList: Array<LinkedList<Entry<K, V>>?> = Array(size = capacity) { LinkedList() }
 
-        for (i in keys) {
-            newList[getIndex(i)]
+        for (index in list.indices) {
+            val nodes = list.getOrNull(index)
+            if (nodes != null) {
+                for (node in nodes) {
+                    newList[getIndex(node.key)]?.add(node)
+                }
+            }
         }
+        list = newList
     }
 
     override fun isEmpty(): Boolean {
@@ -93,14 +84,14 @@ class HashTable<K, V>(private var capacity: Int = 16, private val loadFactor: Fl
 
     private fun getHash(key: K): Int {
         return when (key) {
-            Int -> getHash(key as Int)
-            String -> getHash(key as String)
-            else -> hash(key)
+            is Int -> getHash(key as Int)
+            is String -> getHash(key as String)
+            else -> abs(hash(key))
         }
     }
 
     private fun getHash(key: Int): Int {
-        return key % size
+        return abs(key % capacity)
     }
 
     private fun getHash(key: String): Int {
@@ -115,22 +106,53 @@ class HashTable<K, V>(private var capacity: Int = 16, private val loadFactor: Fl
         return getHash(key) % capacity
     }
 
-    fun put(key: K, value: V) {
+    fun put(key: K, value: V): V? {
         val index = getIndex(key)
         val element = list.getOrNull(index)
+        val previosVal: V? = get(key)
         if (element != null) {
-            if (!element.contains(Node(key, value))) {
-                list[getIndex(key)]?.add(Node(key, value))
+            if (!element.contains(Entry(key, value))) {
+                element.add(Entry(key, value))
                 indexCounter++
             } else {
-                list[getIndex(key)]?.remove(Node(key, value))
-                list[getIndex(key)]?.add(Node(key, value))
+                element.remove(Entry(key, value))
+                element.add(Entry(key, value))
             }
         }
         if ((indexCounter / capacity.toFloat()) >= loadFactor) {
-            println("resize!")
             resize()
         }
+        return previosVal
+    }
+
+    fun clear() {
+        capacity = defaultCapacity
+        list = Array(size = capacity) { LinkedList() }
+        indexCounter = 0
+    }
+
+    fun remove(key: K): V? {
+        val value: V? =
+            list[getIndex(key)]?.stream()?.filter { it.key == key }?.findFirst()?.orElse(null)?.value
+        list[getIndex(key)]?.removeAll { it.key == key }
+        indexCounter--
+        return value
+    }
+
+    fun replace(key: K, oldValue: V, newValue: V): Boolean {
+        val curValue: Any? = get(key)
+        if (curValue != oldValue || curValue == null && !containsKey(key)) {
+            return false
+        }
+        put(key, newValue)
+        return true
+    }
+    fun replace(key: K, value: V): V? {
+        var curValue: V?
+        if (get(key).also { curValue = it } != null || containsKey(key)) {
+            curValue = put(key, value)
+        }
+        return curValue
     }
 
     override fun get(key: K): V {
@@ -155,5 +177,9 @@ class HashTable<K, V>(private var capacity: Int = 16, private val loadFactor: Fl
 
     override fun toString(): String {
         return entries.toString()
+    }
+
+    operator fun set(key: K, value: V) {
+        put(key, value)
     }
 }
