@@ -64,7 +64,7 @@ public class TableMinimize {
 
     public List<List<String>> tableMinimize(List<List<String>> constituents, FormulaType type){
         List<List<String>> minimizeList = minimize.gluing(constituents);
-        minimizeList = minimize.gluing(minimizeList);
+        minimizeList = minimize.infinityGluing(minimizeList);
 
         List<List<String>> output =  new MinimizeList(type);
 
