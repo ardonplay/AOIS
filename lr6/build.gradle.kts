@@ -13,12 +13,7 @@ repositories {
 
 
 dependencies {
-    testImplementation(kotlin("test"))
     implementation(kotlin("stdlib-jdk8"))
-}
-
-tasks.test {
-    useJUnitPlatform()
 }
 
 kotlin {
@@ -26,10 +21,8 @@ kotlin {
 }
 
 application {
-    mainClass.set("MainKt")
+    mainClass.set("org.ardonplay.aois.lr6.MainKt")
 }
-
-
 
 publishing {
     publications {
