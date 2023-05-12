@@ -1,13 +1,15 @@
-package hashTable
+package org.ardonplay.aois.lr6
 
 import java.util.*
 import java.util.Objects.hash
 import kotlin.math.abs
 
-class HashTable<K, V>(private var capacity: Int = 1 shl 4, private val loadFactor: Float = 0.75f) : Map<K, V> {
+class HashTable<K, V>(private var capacity: Int = 1 shl 4) : Map<K, V> {
+    private val loadFactor: Float = 0.75f
 
     private val defaultCapacity = capacity
-    var list: Array<LinkedList<Entry<K, V>>?> = Array(size = capacity) { LinkedList() }
+
+    private var list: Array<LinkedList<Entry<K, V>>?> = Array(size = capacity) { LinkedList() }
 
     private var indexCounter = 0
 
@@ -33,35 +35,27 @@ class HashTable<K, V>(private var capacity: Int = 1 shl 4, private val loadFacto
 
 
     override val entries: Set<Map.Entry<K, V>>
-        get() {
-            val result = HashSet<Map.Entry<K, V>>(capacity)
-            for (nodes in list) {
-                if (nodes != null) {
-                    for (node in nodes) {
-                        result.add(Entry(node.key, node.value))
-                    }
-                }
-            }
-            return result
-        }
+        get() = list.filterNotNull()
+            .flatMap { it.asSequence() }
+            .map { it }
+            .toSet()
 
 
     override val keys: Set<K>
-        get() {
-            val result = HashSet<K>(capacity)
-            for (nodes in list) {
-                if (nodes != null) {
-                    for (node in nodes) {
-                        result.add(node.key)
-                    }
-                }
-            }
-            return result
-        }
+        get() = list.filterNotNull()
+            .flatMap { it.asSequence() }
+            .map { it.key }
+            .toSet()
+
     override val size: Int
         get() = indexCounter
 
-    override val values: Collection<V> = ArrayList(capacity)
+    override val values: Collection<V>
+        get() = list.filterNotNull()
+            .flatMap { it.asSequence() }
+            .map { it.value }
+            .toSet()
+
 
     private fun resize() {
         capacity *= 2
@@ -109,7 +103,7 @@ class HashTable<K, V>(private var capacity: Int = 1 shl 4, private val loadFacto
     fun put(key: K, value: V): V? {
         val index = getIndex(key)
         val element = list.getOrNull(index)
-        val previosVal: V? = get(key)
+        val previousVal: V? = get(key)
         if (element != null) {
             if (!element.contains(Entry(key, value))) {
                 element.add(Entry(key, value))
@@ -122,7 +116,7 @@ class HashTable<K, V>(private var capacity: Int = 1 shl 4, private val loadFacto
         if ((indexCounter / capacity.toFloat()) >= loadFactor) {
             resize()
         }
-        return previosVal
+        return previousVal
     }
 
     fun clear() {
@@ -147,6 +141,7 @@ class HashTable<K, V>(private var capacity: Int = 1 shl 4, private val loadFacto
         put(key, newValue)
         return true
     }
+
     fun replace(key: K, value: V): V? {
         var curValue: V?
         if (get(key).also { curValue = it } != null || containsKey(key)) {
@@ -155,7 +150,7 @@ class HashTable<K, V>(private var capacity: Int = 1 shl 4, private val loadFacto
         return curValue
     }
 
-    override fun get(key: K): V {
+    override fun get(key: K): V? {
         val element = list.getOrNull(getIndex(key))
         if (element != null) {
             for (node in element) {
@@ -164,7 +159,7 @@ class HashTable<K, V>(private var capacity: Int = 1 shl 4, private val loadFacto
                 }
             }
         }
-        throw NullPointerException("map dont have this key!")
+        return null
     }
 
     override fun containsValue(value: V): Boolean {
@@ -177,6 +172,14 @@ class HashTable<K, V>(private var capacity: Int = 1 shl 4, private val loadFacto
 
     override fun toString(): String {
         return entries.toString()
+    }
+
+    fun toStringAsList(): String {
+        return list.joinToString(", ", "[", "]") {
+            it?.joinToString(", ", "[", "]") { entry ->
+                entry.toString()
+            } ?: "[]"
+        }
     }
 
     operator fun set(key: K, value: V) {
