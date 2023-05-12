@@ -231,7 +231,16 @@
       <a name="fanout" val="8"/>
       <a name="incoming" val="8"/>
     </comp>
-    <comp lib="0" loc="(690,1080)" name="Splitter">
+    <comp lib="0" loc="(600,1080)" name="Splitter">
+      <a name="appear" val="right"/>
+      <a name="bit0" val="7"/>
+      <a name="bit1" val="6"/>
+      <a name="bit2" val="5"/>
+      <a name="bit3" val="4"/>
+      <a name="bit4" val="3"/>
+      <a name="bit5" val="2"/>
+      <a name="bit6" val="1"/>
+      <a name="bit7" val="0"/>
       <a name="facing" val="north"/>
       <a name="fanout" val="8"/>
       <a name="incoming" val="8"/>
@@ -315,30 +324,32 @@
     <wire from="(360,920)" to="(580,920)"/>
     <wire from="(360,980)" to="(360,1110)"/>
     <wire from="(580,180)" to="(840,180)"/>
-    <wire from="(580,200)" to="(610,200)"/>
+    <wire from="(580,200)" to="(680,200)"/>
     <wire from="(580,270)" to="(580,290)"/>
-    <wire from="(580,310)" to="(620,310)"/>
+    <wire from="(580,310)" to="(670,310)"/>
     <wire from="(580,380)" to="(580,400)"/>
-    <wire from="(580,420)" to="(630,420)"/>
+    <wire from="(580,420)" to="(660,420)"/>
     <wire from="(580,490)" to="(580,510)"/>
-    <wire from="(580,530)" to="(640,530)"/>
+    <wire from="(580,530)" to="(650,530)"/>
     <wire from="(580,600)" to="(580,620)"/>
-    <wire from="(580,640)" to="(650,640)"/>
+    <wire from="(580,640)" to="(640,640)"/>
     <wire from="(580,700)" to="(580,720)"/>
-    <wire from="(580,740)" to="(660,740)"/>
+    <wire from="(580,740)" to="(630,740)"/>
     <wire from="(580,800)" to="(580,830)"/>
-    <wire from="(580,850)" to="(670,850)"/>
+    <wire from="(580,850)" to="(620,850)"/>
     <wire from="(580,920)" to="(580,940)"/>
-    <wire from="(580,960)" to="(680,960)"/>
-    <wire from="(610,200)" to="(610,1060)"/>
-    <wire from="(620,310)" to="(620,1060)"/>
-    <wire from="(630,420)" to="(630,1060)"/>
-    <wire from="(640,530)" to="(640,1060)"/>
-    <wire from="(650,640)" to="(650,1060)"/>
-    <wire from="(660,740)" to="(660,1060)"/>
-    <wire from="(670,850)" to="(670,1060)"/>
-    <wire from="(680,960)" to="(680,1060)"/>
-    <wire from="(690,1080)" to="(700,1080)"/>
+    <wire from="(580,960)" to="(610,960)"/>
+    <wire from="(600,1080)" to="(700,1080)"/>
+    <wire from="(610,1060)" to="(610,1070)"/>
+    <wire from="(610,960)" to="(610,1060)"/>
+    <wire from="(620,850)" to="(620,1060)"/>
+    <wire from="(630,740)" to="(630,1060)"/>
+    <wire from="(640,640)" to="(640,1060)"/>
+    <wire from="(650,530)" to="(650,1060)"/>
+    <wire from="(660,420)" to="(660,1060)"/>
+    <wire from="(670,310)" to="(670,1060)"/>
+    <wire from="(680,1060)" to="(680,1070)"/>
+    <wire from="(680,200)" to="(680,1060)"/>
     <wire from="(840,180)" to="(840,1110)"/>
   </circuit>
   <circuit name="Step">

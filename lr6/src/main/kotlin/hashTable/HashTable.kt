@@ -6,9 +6,11 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 import kotlin.math.abs
 
-class HashTable<K, V>(private val capacity: Int = 16) : Map<K, V> {
+class HashTable<K, V>(private var capacity: Int = 16, private val loadFactor: Float = 0.75f) : Map<K, V> {
 
     private var list: Array<LinkedList<Node<K, V>>?> = Array(size = capacity) { LinkedList() }
+
+    private var indexCounter = 0
 
     private class Node<K, V>(val key: K, val value: V) {
         override fun equals(other: Any?): Boolean {
@@ -45,13 +47,45 @@ class HashTable<K, V>(private val capacity: Int = 16) : Map<K, V> {
         }
     }
 
-    override var entries: Set<Map.Entry<K, V>> = HashSet(capacity)
+    override val entries: Set<Map.Entry<K, V>>
+        get() {
+            val result = HashSet<Map.Entry<K, V>>(capacity)
+            for (nodes in list) {
+                if (nodes != null) {
+                    for (node in nodes) {
+                        result.add(Entry(node.key, node.value))
+                    }
+                }
+            }
+            return result
+        }
 
-    override var keys: Set<K> = HashSet(capacity)
+
+    override val keys: Set<K>
+        get() {
+            val result = HashSet<K>(capacity)
+            for (nodes in list) {
+                if (nodes != null) {
+                    for (node in nodes) {
+                        result.add(node.key)
+                    }
+                }
+            }
+            return result
+        }
     override val size: Int
-        get() = list.size
+        get() = entries.size
 
     override val values: Collection<V> = ArrayList(capacity)
+
+    private fun resize() {
+        capacity *= 2
+        val newList: Array<LinkedList<Node<K, V>>?> = Array(size = capacity) { LinkedList() }
+
+        for (i in keys) {
+            newList[getIndex(i)]
+        }
+    }
 
     override fun isEmpty(): Boolean {
         return list.isEmpty()
@@ -85,15 +119,17 @@ class HashTable<K, V>(private val capacity: Int = 16) : Map<K, V> {
         val index = getIndex(key)
         val element = list.getOrNull(index)
         if (element != null) {
-            keys += key
-            entries += Entry(key, value)
-
             if (!element.contains(Node(key, value))) {
                 list[getIndex(key)]?.add(Node(key, value))
+                indexCounter++
             } else {
                 list[getIndex(key)]?.remove(Node(key, value))
                 list[getIndex(key)]?.add(Node(key, value))
             }
+        }
+        if ((indexCounter / capacity.toFloat()) >= loadFactor) {
+            println("resize!")
+            resize()
         }
     }
 
@@ -110,7 +146,7 @@ class HashTable<K, V>(private val capacity: Int = 16) : Map<K, V> {
     }
 
     override fun containsValue(value: V): Boolean {
-        return entries.any{it.value == value}
+        return entries.any { it.value == value }
     }
 
     override fun containsKey(key: K): Boolean {
