@@ -4,7 +4,7 @@ plugins {
     application
 }
 
-group = "org.ardonplay.aois"
+group = "org.ardonplay.aois.lr6"
 version = "1.0"
 
 repositories {
