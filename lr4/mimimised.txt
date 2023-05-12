@@ -12,7 +12,7 @@ A B C S P
 1 1 0 0 1
 1 1 1 1 1
 
-1.Переход: (A+B+C)*(A+B+!C)*(A+!B+C)*(!A+B+C) ->(A+B)⋅(A+C)⋅(B+C)
+1.Переход: (A+B+C)*(A+B+!C)*(A+!B+C)*(!A+B+C) ->(A+B)*(A+C)*(B+C)
 2.Сумма: (!A+C+!B)*(!A+!C+B)*(A+!C+!B)*(C+B+A) -> не сокращается
 
 
@@ -25,17 +25,17 @@ A B C S P
 !A !B  C  D        0 1 1 1
 !A  B !C !D        1 0 0 0
 !A  B !C  D        1 0 0 1
-!A  B  C !D        0 0 0 0
-!A  B  C  D        0 0 0 1
- A !B !C !D        0 0 1 0
- A !B !C  D        0 0 1 1
- A !B  C !D        1 0 1 0
- A !B  C  D        1 0 1 1
- A  B !C !D        1 1 0 0
- A  B !C  D        1 1 0 1
- A  B  C !D        1 1 1 0
- A  B  C  D        1 1 1 1
- 1. (!A*B*!C*!D)+(!A*B*!C*D)+(A*!B*C*!D)+(A*!B*C*D)+(A*B*!C*!D)+(A*B*!C*D)+(A*B*C*!D)+(A*B*C*D) -> (A*C)+(B*!C)
- 2. (!A*!B*!C*!D)+(!A*!B*!C*D)+(!A*!B*C*!D)+(!A*!B*C*D)+(A*B*!C*!D)+(A*B*!C*D)+(A*B*C*!D)+(A*B*C*D) -> (A*B)+(!A*!B)
- 3. (!A*!B*C*!D)+(!A*!B*C*D)+(A*!B*!C*!D)+(A*!B*!C*D)+(A*!B*C*!D)+(A*!B*C*D)+(A*B*C*!D)+(A*B*C*D) -> (A*!B)+(A*C)+(!B*C)
- 4. (!A*!B*!C*D)+(!A*!B*C*D)+(!A*B*!C*D)+(!A*B*C*D)+(A*!B*!C*D)+(A*!B*C*D)+(A*B*!C*D)+(A*B*C*D) -> D
+!A  B  C !D        1 0 1 0
+!A  B  C  D        1 0 1 1
+ A !B !C !D        1 1 0 0
+ A !B !C  D        1 1 0 1
+ A !B  C !D        1 1 1 0
+ A !B  C  D        1 1 1 1
+ A  B !C !D        0 0 0 0
+ A  B !C  D        0 0 0 1
+ A  B  C !D        0 0 1 0
+ A  B  C  D        0 0 1 1
+ 1. (!A*B*!C*!D)+(!A*B*!C*D)+(!A*B*C*!D)+(!A*B*C*D)+(A*!B*!C*!D)+(A*!B*C*D) -> (!D*!C*!B*A)+(D*C*!B*A)+(B*!A)
+ 2. (!A*!B*!C*!D)+(!A*!B*!C*D)+(!A*!B*C*!D)+(!A*!B*C*D)+(A*!B*!C*!D)+(A*!B*!C*D)+(A*!B*C*!D)+(A*!B*C*D) -> (!B)
+ 3. (!A*!B*C*!D)+(!A*!B*C*D)+(!A*B*C*!D)+(!A*B*C*D)+(A*!B*C*!D)+(A*!B*C*D)+(A*B*C*!D)+(A*B*C*D) -> (C)
+ 4. (!A*!B*!C*D)+(!A*!B*C*D)+(!A*B*!C*D)+(!A*B*C*D)+(A*!B*!C*D)+(A*!B*C*D)+(A*B*!C*D)+(A*B*C*D) -> (D)
