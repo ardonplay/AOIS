@@ -6,14 +6,26 @@ import java.util.Objects;
 
 public class Binary {
     private static final int size = 1 << 4;
-    private final List<Integer> binary;
+    private final List<Integer> bites;
+
+    public List<Integer> getBites() {
+        return bites;
+    }
+
+    public int toDecimal() {
+        int decimal = 0;
+
+        for (int i = bites.size() - 1; i >= 0; i--) {
+            if (bites.get(i) == 1) {
+                decimal += Math.pow(2, bites.size() - 1 - i);
+            }
+        }
+
+        return decimal;
+    }
 
     private List<Integer> toBinary(int word){
         List<Integer> output = new ArrayList<>(size);
-        if(word == 0){
-            output.add(0);
-            return output;
-        }
 
         while (word > 0) {
             int remainder = word % 2;
@@ -28,20 +40,20 @@ public class Binary {
         return output;
     }
     public Binary(int word){
-        binary = toBinary(word);
+        bites = toBinary(word);
     }
 
     public boolean more(Binary second){
-        for(int i =0; i < binary.size(); i++){
-            if(binary.get(i) > second.binary.get(i)){
+        for(int i = 0; i < bites.size(); i++){
+            if(bites.get(i) > second.bites.get(i)){
                 return true;
             }
         }
         return false;
     }
     public boolean less(Binary second){
-        for(int i =0; i < binary.size(); i++){
-            if(binary.get(i) < second.binary.get(i)){
+        for(int i = 0; i < bites.size(); i++){
+            if(bites.get(i) < second.bites.get(i)){
                 return true;
             }
         }
@@ -52,17 +64,17 @@ public class Binary {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Binary binary1 = (Binary) o;
-        return Objects.equals(binary, binary1.binary);
+        return Objects.equals(bites, binary1.bites);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(binary);
+        return Objects.hash(bites);
     }
 
     @Override
     public String toString() {
-        return binary.toString();
+        return bites.toString();
     }
 
 }
