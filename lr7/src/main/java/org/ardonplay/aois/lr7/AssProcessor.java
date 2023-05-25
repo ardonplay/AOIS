@@ -1,14 +1,11 @@
 package org.ardonplay.aois.lr7;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-public class AssMemory {
+public class AssProcessor {
     final private MemoryList memory;
 
-    public AssMemory(int size){
+    public AssProcessor(int size){
         memory = new MemoryList(size);
 
     }
