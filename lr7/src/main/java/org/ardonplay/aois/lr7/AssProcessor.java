@@ -1,9 +1,10 @@
 package org.ardonplay.aois.lr7;
 
 import java.util.List;
+import java.util.Objects;
 
 public class AssProcessor {
-    final private MemoryList memory;
+    final protected MemoryList memory;
 
     public AssProcessor(int size){
         memory = new MemoryList(size);
@@ -30,7 +31,7 @@ public class AssProcessor {
         for (Binary binary : memory) {
             int count = 0;
             for (int j = 0; j < binary.getBites().size(); j++) {
-                if (findable.getBites().get(j) == binary.getBites().get(j)) {
+                if (Objects.equals(findable.getBites().get(j), binary.getBites().get(j))) {
                     count++;
                 }
             }
