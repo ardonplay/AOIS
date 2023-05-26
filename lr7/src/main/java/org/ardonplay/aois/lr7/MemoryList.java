@@ -30,7 +30,7 @@ public class MemoryList extends ArrayList<Binary> implements List<Binary> {
             int index = 0;
 
             for(int j =0; j < size; j++){
-                if(get(j).more(max)){
+                if(max.compareTo(get(j)) < 0) {
                     max = get(j);
                     index = j;
                 }

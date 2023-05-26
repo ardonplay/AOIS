@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Binary {
+public class Binary implements Comparable<Binary> {
     private static final int size = 1 << 4;
     private final List<Integer> bites;
 
@@ -43,22 +43,6 @@ public class Binary {
         bites = toBinary(word);
     }
 
-    public boolean more(Binary second){
-        for(int i = 0; i < bites.size(); i++){
-            if(bites.get(i) > second.bites.get(i)){
-                return true;
-            }
-        }
-        return false;
-    }
-    public boolean less(Binary second){
-        for(int i = 0; i < bites.size(); i++){
-            if(bites.get(i) < second.bites.get(i)){
-                return true;
-            }
-        }
-        return false;
-    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,7 +58,19 @@ public class Binary {
 
     @Override
     public String toString() {
-        return bites.toString();
+        return bites.toString() + "\t" + toDecimal();
     }
 
+    @Override
+    public int compareTo(Binary o) {
+        for(int i = 0; i < bites.size(); i++){
+            if(bites.get(i) == 1 && o.bites.get(i) == 0){
+                return 1;
+            }
+            else if(bites.get(i) == 0 && o.bites.get(i) == 1){
+                return -1;
+            }
+        }
+        return 0;
+    }
 }

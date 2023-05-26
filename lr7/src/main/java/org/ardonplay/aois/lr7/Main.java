@@ -1,22 +1,27 @@
 package org.ardonplay.aois.lr7;
 
+import java.util.Random;
+
 public class Main {
     public static void main(String[] args) {
-        AssProcessor memory = new AssProcessor(32);
+        AssProcessor memory = new AssProcessor(16);
+
+        Random random = new Random();
 
         memory.push(0, new Binary(10));
 
-        memory.push(10, new Binary(17));
+        memory.push(0, new Binary(4));
 
-        memory.push(10, new Binary(18));
+        memory.push(10, new Binary(1));
 
-        memory.push(8, new Binary(2));
-
-        System.out.println(memory.findTheAppropriate(new Binary(18)));
-
-        Binary binary = new Binary(25);
-        System.out.println(binary.toDecimal());
-        System.out.println(memory.getByInterval(0, 10));
         System.out.println(memory);
+
+        int number = 4;
+
+        System.out.println(memory.findTheAppropriate(new Binary(number)) + "\n");
+
+
+        //System.out.println(memory.getByInterval(1, 4));
+
     }
 }
