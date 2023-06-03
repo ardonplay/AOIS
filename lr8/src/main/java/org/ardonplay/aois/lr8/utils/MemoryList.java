@@ -1,25 +1,22 @@
-package org.ardonplay.aois.lr8Se;
-
-import org.ardonplay.aois.lr7.Binary;
-import org.ardonplay.aois.lr7.Memory;
+package org.ardonplay.aois.lr8.utils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class AssMemoryList extends ArrayList<Sector> implements List<Sector>{
-    public AssMemoryList(int size) {
+public class MemoryList extends ArrayList<Sector> implements List<Sector>{
+    public MemoryList(int size) {
         super(size);
         addAll(Stream.generate(() -> new Sector(0))
                 .limit(size)
                 .collect(Collectors.toCollection(ArrayList::new)));
     }
-    public AssMemoryList() {
+    public MemoryList() {
         super();
     }
 
-    public AssMemoryList(List<Sector> memory) {
+    public MemoryList(List<Sector> memory) {
         super(memory);
     }
 
