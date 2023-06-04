@@ -93,6 +93,16 @@ public class AssMemory implements Memory {
         return new Buffer(new Sector(memory.get(i).getBites()), i).pull();
     }
 
+
+    public Binary getWord(int pos){
+        Binary output = new Binary(0);
+        output.getBites().clear();
+        for(Binary binary: memory){
+            output.getBites().add(binary.getBites().get(pos));
+        }
+        return output;
+    }
+
     @Override
     public int size() {
         return memory.size();
@@ -109,7 +119,12 @@ public class AssMemory implements Memory {
 
             return normalMemory.toString();
         } else {
-            return memory.toString();
+            List<Binary> memoryViewForBug = new MemoryList();
+
+            for(int i =0; i < memory.size(); i++){
+                memoryViewForBug.add(getWord(i));
+            }
+            return memoryViewForBug.toString();
         }
     }
 }

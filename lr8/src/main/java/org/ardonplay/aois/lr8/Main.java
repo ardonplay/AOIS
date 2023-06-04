@@ -65,5 +65,21 @@ public class Main {
 
         System.out.println("Поиск по соответсвию для числа: " + new Binary(number));
         System.out.println(memory.findTheAppropriate(new Binary(number)));
+
+        memory.normalForm = false;
+        System.out.println("Диагональная форма:");
+        System.out.println(memory);
+
+        memory.normalForm = true;
+        System.out.println("Нормальная форма:");
+        System.out.println(memory);
+
+
+
+        System.out.println("Получение слова по индексу 5");
+        System.out.println(memory.getWord(5));
+
+        System.out.println("Получение столбца по индексу 5");
+        System.out.println(memory.getMemory().get(5));
     }
 }
