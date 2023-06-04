@@ -34,12 +34,9 @@ public class LogicOperations {
         else if ((first == 1 && second == 0) ||(first == 0 && second == 1)) {
             if (trans) {
                 sum.add(0);
-                trans = true;
             } else {
                 sum.add(1);
-                trans = false;
             }
-
         }
         else if (first == 1 && second == 1) {
             if (trans) {

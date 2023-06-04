@@ -2,16 +2,16 @@ package org.ardonplay.aois.lr8;
 
 
 import org.ardonplay.aois.lr7.Binary;
-import org.ardonplay.aois.lr7.Memory;
+import org.ardonplay.aois.lr7.implementations.MemoryList;
+import org.ardonplay.aois.lr7.rules.Memory;
 import org.ardonplay.aois.lr8.utils.Buffer;
 import org.ardonplay.aois.lr8.utils.LogicOperations;
-import org.ardonplay.aois.lr8.utils.MemoryList;
 import org.ardonplay.aois.lr8.utils.Sector;
 
 import java.util.*;
 
 public class AssMemory implements Memory {
-    private final List<Sector> memory;
+    private final List<Binary> memory;
 
     public AssMemory(int size) {
         memory = new MemoryList(size);
@@ -19,57 +19,11 @@ public class AssMemory implements Memory {
 
     public boolean normalForm = false;
 
-
-    @Override
-    public String toString(){
-        if(normalForm){
-            return super.toString();
-        }
-        else {
-           return memory.toString();
-        }
-    }
-
-    public Binary findTheAppropriate(Binary findable) {
-        MemoryList list = new MemoryList(memory);
-        list.sort();
-
-        Binary max = findable;
-
-        Binary min = new Binary(0);
-        for (Binary binary : list) {
-            if (binary.compareTo(findable) <= 0) {
-                max = binary;
-                break;
-            }
-        }
-        for (Binary binary : list) {
-            if (binary.compareTo(findable) > 0) {
-                min = binary;
-                break;
-            }
-        }
-
-        int count_max = 0;
-        int count_min = 0;
-
-        for(int i =0; i < max.getBites().size(); i++){
-            if(Objects.equals(max.getBites().get(i), findable.getBites().get(i))){
-                count_max++;
-            }
-            if(Objects.equals(min.getBites().get(i), findable.getBites().get(i))){
-                count_min++;
-            }
-        }
-        return count_max > count_min ? max : min;
-    }
-
-
     public void masking(String symbols) {
         if (symbols.length() == 3) {
 
-           for(int i =0; i < memory.size(); i++){
-                Buffer buffer = new Buffer(memory.get(i), i);
+            for (int i = 0; i < memory.size(); i++) {
+                Buffer buffer = new Buffer(new Sector(get(i).getBites()), i);
                 Sector sector = buffer.pull();
                 boolean fit = true;
                 List<Integer> bites = sector.getKey();
@@ -94,20 +48,28 @@ public class AssMemory implements Memory {
             }
         }
     }
-    public void functionZero(int pos){
-        memory.set(pos, new Sector(0));
-    }
-    public void functionFifty(int pos){
-        memory.set(pos, new Sector(Collections.nCopies(16,1)));
+
+    public void functionZero(int pos) {
+        push(pos, new Sector(0));
     }
 
-    public void functionFive(int firstPos, int secondPos){
-        memory.set(firstPos, memory.get(secondPos));
+    public void functionFifty(int pos) {
+        push(pos, new Sector(Collections.nCopies(16, 1)));
     }
 
-    public void functionTen(int firstPos, int secondPos){
-        memory.set(firstPos, LogicOperations.not(memory.get(secondPos)));
+    public void functionFive(int firstPos, int secondPos) {
+        push(firstPos, get(secondPos));
     }
+
+    public void functionTen(int firstPos, int secondPos) {
+        push(firstPos, LogicOperations.not(get(secondPos)));
+    }
+
+    @Override
+    public List<Binary> getMemory() {
+        return memory;
+    }
+
     @Override
     public boolean push(int pos, Binary bin) {
         if (pos < this.memory.size()) {
@@ -128,6 +90,26 @@ public class AssMemory implements Memory {
 
     @Override
     public Binary get(int i) {
-        return new Buffer(memory.get(i), i).pull();
+        return new Buffer(new Sector(memory.get(i).getBites()), i).pull();
+    }
+
+    @Override
+    public int size() {
+        return memory.size();
+    }
+
+    @Override
+    public String toString() {
+        if (normalForm) {
+            List<Binary> normalMemory = new MemoryList();
+
+            for (int i = 0; i < memory.size(); i++) {
+                normalMemory.add(get(i));
+            }
+
+            return normalMemory.toString();
+        } else {
+            return memory.toString();
+        }
     }
 }

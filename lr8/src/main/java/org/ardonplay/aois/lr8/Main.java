@@ -1,35 +1,69 @@
 package org.ardonplay.aois.lr8;
 
 
+import org.ardonplay.aois.lr7.Binary;
 import org.ardonplay.aois.lr8.utils.Sector;
+
+import java.util.List;
+import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
 
         AssMemory memory = new AssMemory(16);
+        List<Integer> numbers = List.of(50400, 67, 82, 257, 64300, 23743, 125, 657, 892, 4, 76, 45, 32, 4000, 789, 2852);
 
-        memory.push(0, new Sector(255));
-        memory.push(1, new Sector(10));
-
-
-        memory.push(5, new Sector(5687));
-
-        memory.push(6, new Sector(48960));
-
-        memory.functionTen(1,2);
-
-       // System.out.println(memory);
-
-
-        System.out.println(memory);
-         memory.masking("101");
-
+        for (int i = 0; i < memory.size(); i++) {
+            memory.push(i, new Sector(numbers.get(i)));
+        }
+        System.out.println("Проинициализированная память в диагональном виде");
         System.out.println(memory);
 
-        System.out.println(memory.get(6));
+        memory.normalForm = true;
+        System.out.println("Проинициализированная память в нормальном виде");
+        System.out.println(memory);
 
-        //System.out.println(memory);
+        System.out.println("Дальнейшие выводы будут в нормальном виде, для удобного понимания изменений");
+        System.out.println();
 
-        //System.out.println(memory.findTheAppropriate(new Binary(11)));
+        System.out.println("Функция 0 для позиции 5:");
+        memory.functionZero(5);
+        System.out.println("Сектор 5:");
+        System.out.println(memory.get(5));
+        System.out.println(memory);
+
+        System.out.println("Функция 15 для позиции 12:");
+        memory.functionFifty(12);
+        System.out.println("Сектор 12:");
+        System.out.println(memory.get(12));
+        System.out.println(memory);
+
+        System.out.println("Функция 10 для позиций 7 и 15:");
+        memory.functionTen(7, 15);
+        System.out.println("Сектор 7:");
+        System.out.println(memory.get(7));
+        System.out.println("Сектор 15:");
+        System.out.println(memory.get(15));
+        System.out.println(memory);
+
+        System.out.println("Функция 5 для позиций 3 и 10:");
+        memory.functionFive(3, 10);
+        System.out.println("Сектор 3:");
+        System.out.println(memory.get(3));
+        System.out.println("Сектор 10:");
+        System.out.println(memory.get(10));
+        System.out.println(memory);
+
+        System.out.println("Сумма сектора а и сектора b по маске: 1*0");
+        memory.masking("1*0");
+
+        System.out.println(memory);
+
+
+        Random random = new Random();
+        int number = random.nextInt(100);
+
+        System.out.println("Поиск по соответсвию для числа: " + new Binary(number));
+        System.out.println(memory.findTheAppropriate(new Binary(number)));
     }
 }
