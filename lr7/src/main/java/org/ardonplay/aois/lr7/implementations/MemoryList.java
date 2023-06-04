@@ -1,14 +1,16 @@
-package org.ardonplay.aois.lr7;
+package org.ardonplay.aois.lr7.implementations;
+
+import org.ardonplay.aois.lr7.Binary;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class MemoryList extends ArrayList<Binary> implements List<Binary> {
+public class MemoryList extends ArrayList<Binary> implements List<Binary>{
     public MemoryList(int size) {
         super(size);
-        addAll(Stream.generate(() -> new Binary(0))
+        addAll( Stream.generate(() -> new Binary(0))
                 .limit(size)
                 .collect(Collectors.toCollection(ArrayList::new)));
     }
@@ -18,6 +20,12 @@ public class MemoryList extends ArrayList<Binary> implements List<Binary> {
 
     public MemoryList(List<Binary> memory) {
         super(memory);
+    }
+    public MemoryList(List<Binary> memory, boolean sort) {
+        super(memory);
+        if(sort){
+            sort();
+        }
     }
 
     public void sort(){

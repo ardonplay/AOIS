@@ -9,12 +9,18 @@ version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 application {
     mainClass = 'org.ardonplay.aois.lr7.Main'
 }
 
+dependencies {
+    implementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: '1.8.21'
+    implementation group: 'org.jetbrains.kotlin', name: 'kotlin-gradle-plugin', version: '1.8.21'
+    implementation("org.ardonplay.aois.lr6:lr6:1.0")
+}
 
 publishing {
     publications {

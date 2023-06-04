@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class Binary implements Comparable<Binary> {
-    private static final int size = 1 << 4;
-    private final List<Integer> bites;
+    protected static final int size = 1 << 4;
+    protected final List<Integer> bites;
 
     public List<Integer> getBites() {
         return bites;
@@ -24,7 +24,7 @@ public class Binary implements Comparable<Binary> {
         return decimal;
     }
 
-    private List<Integer> toBinary(int word){
+    private List<Integer> toBinary(int word) {
         List<Integer> output = new ArrayList<>(size);
 
         while (word > 0) {
@@ -34,13 +34,18 @@ public class Binary implements Comparable<Binary> {
         }
         int zeroSize = size - output.size();
 
-        for(int i =0; i < zeroSize; i++){
-            output.add(0,0);
+        for (int i = 0; i < zeroSize; i++) {
+            output.add(0, 0);
         }
         return output;
     }
-    public Binary(int word){
+
+    public Binary(int word) {
         bites = toBinary(word);
+    }
+
+    public Binary(List<Integer> bites) {
+        this.bites = new ArrayList<>(bites);
     }
 
     @Override
@@ -63,11 +68,10 @@ public class Binary implements Comparable<Binary> {
 
     @Override
     public int compareTo(Binary o) {
-        for(int i = 0; i < bites.size(); i++){
-            if(bites.get(i) == 1 && o.bites.get(i) == 0){
+        for (int i = 0; i < bites.size(); i++) {
+            if (bites.get(i) == 1 && o.bites.get(i) == 0) {
                 return 1;
-            }
-            else if(bites.get(i) == 0 && o.bites.get(i) == 1){
+            } else if (bites.get(i) == 0 && o.bites.get(i) == 1) {
                 return -1;
             }
         }
