@@ -2,6 +2,7 @@ package org.ardonplay.aois.lr8;
 
 
 import org.ardonplay.aois.lr7.Binary;
+import org.ardonplay.aois.lr8.utils.Buffer;
 import org.ardonplay.aois.lr8.utils.Sector;
 
 import java.util.List;
@@ -16,15 +17,13 @@ public class Main {
         for (int i = 0; i < memory.size(); i++) {
             memory.push(i, new Sector(numbers.get(i)));
         }
-        System.out.println("Проинициализированная память в диагональном виде");
+        System.out.println("Память:");
         System.out.println(memory);
 
-        memory.normalForm = true;
-        System.out.println("Проинициализированная память в нормальном виде");
+        System.out.println("Срезы по столбцам:");
+        memory.normalForm = false;
         System.out.println(memory);
 
-        System.out.println("Дальнейшие выводы будут в нормальном виде, для удобного понимания изменений");
-        System.out.println();
 
         System.out.println("Функция 0 для позиции 5:");
         memory.functionZero(5);
@@ -66,20 +65,7 @@ public class Main {
         System.out.println("Поиск по соответсвию для числа: " + new Binary(number));
         System.out.println(memory.findTheAppropriate(new Binary(number)));
 
-        memory.normalForm = false;
-        System.out.println("Диагональная форма:");
-        System.out.println(memory);
-
-        memory.normalForm = true;
-        System.out.println("Нормальная форма:");
-        System.out.println(memory);
 
 
-
-        System.out.println("Получение слова по индексу 5");
-        System.out.println(memory.getWord(5));
-
-        System.out.println("Получение столбца по индексу 5");
-        System.out.println(memory.getMemory().get(5));
     }
 }

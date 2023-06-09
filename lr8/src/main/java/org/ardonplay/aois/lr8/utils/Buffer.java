@@ -15,12 +15,13 @@ public class Buffer {
     }
 
     public void load(Sector sector, int pos) {
+        int position = pos % sector.getBites().size();
         List<Integer> normalBinary = new ArrayList<>();
-        for (int i = pos; i < sector.getBites().size(); i++) {
+        for (int i = position; i < sector.getBites().size(); i++) {
             normalBinary.add(sector.getBites().get(i));
         }
 
-        for (int i = 0; i < pos; i++) {
+        for (int i = 0; i < position; i++) {
             normalBinary.add(sector.getBites().get(i));
         }
 

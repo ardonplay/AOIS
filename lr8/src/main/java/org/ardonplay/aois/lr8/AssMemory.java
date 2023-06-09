@@ -17,7 +17,7 @@ public class AssMemory implements Memory {
         memory = new MemoryList(size);
     }
 
-    public boolean normalForm = false;
+    public boolean normalForm = true;
 
     public void masking(String symbols) {
         if (symbols.length() == 3) {
@@ -43,26 +43,26 @@ public class AssMemory implements Memory {
                     System.out.println("[После]");
                     System.out.println(sector);
 
-                    push(i, sector);
+                    pushSector(i, sector);
                 }
             }
         }
     }
 
     public void functionZero(int pos) {
-        push(pos, new Sector(0));
+        pushSector(pos, new Sector(0));
     }
 
     public void functionFifty(int pos) {
-        push(pos, new Sector(Collections.nCopies(16, 1)));
+        pushSector(pos, new Sector(Collections.nCopies(16, 1)));
     }
 
     public void functionFive(int firstPos, int secondPos) {
-        push(firstPos, get(secondPos));
+        pushSector(firstPos, get(secondPos));
     }
 
     public void functionTen(int firstPos, int secondPos) {
-        push(firstPos, LogicOperations.not(get(secondPos)));
+        pushSector(firstPos, LogicOperations.not(get(secondPos)));
     }
 
     @Override
@@ -72,35 +72,50 @@ public class AssMemory implements Memory {
 
     @Override
     public boolean push(int pos, Binary bin) {
-        if (pos < this.memory.size()) {
+        if(pos < memory.size()) {
+            this.memory.set(pos, bin);
+            return true;
+        }
+        else
+            return false;
+    }
+
+
+    public boolean pushSector(int pos, Binary bin){
+        if (pos < this.memory.get(0).getBites().size()) {
             Sector sector = new Sector(0);
             sector.getBites().clear();
-            for (int i = bin.getBites().size() - pos; i < bin.getBites().size(); i++) {
+
+            int position =  bin.getBites().size() - pos;
+
+            for (int i = position; i < bin.getBites().size(); i++) {
                 sector.getBites().add(bin.getBites().get(i));
             }
-            for (int i = 0; i < bin.getBites().size() - pos; i++) {
+            for (int i = 0; i < position; i++) {
                 sector.getBites().add(bin.getBites().get(i));
             }
-            this.memory.set(pos, sector);
+            for(int i =0;i < sector.getBites().size(); i++){
+                memory.get(i).getBites().set(pos, sector.getBites().get(i));
+            }
             return true;
         } else {
             return false;
         }
     }
 
-    @Override
-    public Binary get(int i) {
-        return new Buffer(new Sector(memory.get(i).getBites()), i).pull();
+    public Binary getWord(int i) {
+        return memory.get(i);
     }
 
-
-    public Binary getWord(int pos){
-        Binary output = new Binary(0);
+    @Override
+    public Binary get(int pos){
+        Sector output = new Sector(0);
         output.getBites().clear();
         for(Binary binary: memory){
             output.getBites().add(binary.getBites().get(pos));
         }
-        return output;
+
+        return new Buffer(output, pos).pull();
     }
 
     @Override
@@ -111,18 +126,12 @@ public class AssMemory implements Memory {
     @Override
     public String toString() {
         if (normalForm) {
-            List<Binary> normalMemory = new MemoryList();
-
-            for (int i = 0; i < memory.size(); i++) {
-                normalMemory.add(get(i));
-            }
-
-            return normalMemory.toString();
+            return memory.toString();
         } else {
             List<Binary> memoryViewForBug = new MemoryList();
 
             for(int i =0; i < memory.size(); i++){
-                memoryViewForBug.add(getWord(i));
+                memoryViewForBug.add(get(i));
             }
             return memoryViewForBug.toString();
         }
