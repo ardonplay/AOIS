@@ -2,7 +2,6 @@ package org.ardonplay.aois.lr8;
 
 
 import org.ardonplay.aois.lr7.Binary;
-import org.ardonplay.aois.lr8.utils.Buffer;
 import org.ardonplay.aois.lr8.utils.Sector;
 
 import java.util.List;
@@ -27,29 +26,29 @@ public class Main {
 
         System.out.println("Функция 0 для позиции 5:");
         memory.functionZero(5);
-        System.out.println("Сектор 5:");
+        System.out.println("Столбец 5:");
         System.out.println(memory.get(5));
         System.out.println(memory);
 
         System.out.println("Функция 15 для позиции 12:");
         memory.functionFifty(12);
-        System.out.println("Сектор 12:");
+        System.out.println("Столбец 12:");
         System.out.println(memory.get(12));
         System.out.println(memory);
 
         System.out.println("Функция 10 для позиций 7 и 15:");
         memory.functionTen(7, 15);
-        System.out.println("Сектор 7:");
+        System.out.println("Столбец 7:");
         System.out.println(memory.get(7));
-        System.out.println("Сектор 15:");
+        System.out.println("Столбец 15:");
         System.out.println(memory.get(15));
         System.out.println(memory);
 
         System.out.println("Функция 5 для позиций 3 и 10:");
         memory.functionFive(3, 10);
-        System.out.println("Сектор 3:");
+        System.out.println("Столбец 3:");
         System.out.println(memory.get(3));
-        System.out.println("Сектор 10:");
+        System.out.println("Столбец 10:");
         System.out.println(memory.get(10));
         System.out.println(memory);
 
@@ -65,7 +64,7 @@ public class Main {
         System.out.println("Поиск по соответсвию для числа: " + new Binary(number));
         System.out.println(memory.findTheAppropriate(new Binary(number)));
 
-
-
+        memory.normalForm = true;
+        System.out.println(memory);
     }
 }

@@ -23,8 +23,7 @@ public class AssMemory implements Memory {
         if (symbols.length() == 3) {
 
             for (int i = 0; i < memory.size(); i++) {
-                Buffer buffer = new Buffer(new Sector(get(i).getBites()), i);
-                Sector sector = buffer.pull();
+                Sector sector = (Sector) get(i);
                 boolean fit = true;
                 List<Integer> bites = sector.getKey();
                 for (int j = 0; j < symbols.length(); j++) {
@@ -36,13 +35,8 @@ public class AssMemory implements Memory {
                 }
 
                 if (fit) {
-                    System.out.println("[До суммы]");
-                    System.out.println(sector);
                     List<Integer> sum = LogicOperations.summator(sector.getaPart(), sector.getbPart());
                     sector.setsPart(sum);
-                    System.out.println("[После]");
-                    System.out.println(sector);
-
                     pushSector(i, sector);
                 }
             }
